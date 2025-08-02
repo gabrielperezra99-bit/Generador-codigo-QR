@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir Plano</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --success: #10b981;
+            --success-dark: #059669;
+            --danger: #ef4444;
+            --danger-dark: #dc2626;
+            --bg-gradient: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            --surface: #ffffff;
+            --surface-hover: #f1f5f9;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-white: #ffffff;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 520px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+        
+        label i {
+            margin-right: 8px;
+            color: var(--primary);
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .file-upload {
+            border: 2px dashed var(--primary-light);
+            border-radius: var(--radius-lg);
+            padding: 48px 24px;
+            text-align: center;
+            background: rgba(59, 130, 246, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--primary);
+            transform: scale(1.01);
+        }
+        
+        .file-upload i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: block;
+        }
+        
+        .file-upload p {
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: var(--text-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 24px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .qr-result {
+            text-align: center;
+            margin-top: 32px;
+        }
+        
+        .qr-result h3 {
+            color: var(--success);
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+        
+        .qr-container {
+            background: rgba(16, 185, 129, 0.05);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            margin: 24px 0;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .qr-code-display {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+        
+        .file-info {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--text-primary);
+            padding: 16px;
+            border-radius: var(--radius);
+            margin-top: 12px;
+            font-size: 0.95rem;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .btn-small {
+            padding: 10px 16px;
+            margin: 8px;
+            display: inline-flex;
+            font-size: 0.9rem;
+            width: auto;
+        }
+        
+        .alert {
+            background: #fef2f2;
+            color: #991b1b;
+            padding: 16px;
+            border-radius: var(--radius);
+            margin: 16px 0;
+            border: 1px solid #fecaca;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .url-box {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: var(--radius);
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.85rem;
+            word-break: break-all;
+            margin: 16px 0;
+            color: var(--text-secondary);
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-success:hover {
+            background: var(--success-dark);
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        .container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                margin: 10px;
+                padding: 24px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .file-upload {
+                padding: 32px 16px;
+            }
+            
+            .file-upload i {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-qrcode"></i> Subir Plano</h1>
+        
+        <div id="formulario">
+            <div class="form-group">
+                <label><i class="fas fa-file-alt"></i> Nombre del Plano</label>
+                <input type="text" id="nombrePlano" placeholder="Ej: Casa Familiar" required>
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Cliente</label>
+                <input type="text" id="cliente" placeholder="Nombre del cliente" required>
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-upload"></i> Archivo del Plano</label>
+                <div class="file-upload" onclick="document.getElementById('archivo').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Haz clic para subir<br>PDF, JPG, PNG (máx. 500KB)</p>
+                    <input type="file" id="archivo" accept=".pdf,.jpg,.jpeg,.png" style="display: none;" onchange="mostrarArchivo(this)">
+                </div>
+                <div id="archivoInfo" class="file-info hidden"></div>
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-comment"></i> Descripción</label>
+                <textarea id="descripcion" placeholder="Breve descripción..." rows="3"></textarea>
+            </div>
+            
+            <button class="btn" onclick="crearPlano()">
+                <i class="fas fa-qrcode"></i> Generar QR
+            </button>
+        </div>
+        
+        <div id="resultado" class="qr-result hidden">
+            <h3>¡Plano guardado exitosamente!</h3>
+            
+            <div class="qr-container">
+                <div id="qrCodeDisplay" class="qr-code-display"></div>
+                <div style="margin-top: 16px;">
+                    <strong>Código QR generado</strong><br>
+                    <small>ID: <span id="planoId"></span></small>
+                </div>
+            </div>
+            
+            <div class="url-box" id="urlPlano"></div>
+            
+            <div style="margin-top: 24px;">
+                <button class="btn btn-small" onclick="copiarURL()">
+                    <i class="fas fa-copy"></i> Copiar URL
+                </button>
+                <button class="btn btn-small" onclick="verPlano()">
+                    <i class="fas fa-eye"></i> Ver Plano
+                </button>
+            </div>
+            
+            <button class="btn" onclick="nuevoPlano()" style="margin-top: 24px;">
+                <i class="fas fa-plus"></i> Subir Otro Plano
+            </button>
+            
+            <a href="mis-planos.html" class="btn btn-success" style="margin-top: 12px; text-decoration: none;">
+                <i class="fas fa-folder-open"></i> Ver Mis Planos
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let archivoSeleccionado = null;
+        let planoActual = null;
+
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+        document.head.appendChild(script);
+
+        function mostrarArchivo(input) {
+            const archivo = input.files[0];
+            const info = document.getElementById('archivoInfo');
+            
+            if (archivo) {
+                if (archivo.size > 512000) {
+                    alert('El archivo es demasiado grande. Máximo permitido: 500KB');
+                    input.value = '';
+                    info.classList.add('hidden');
+                    archivoSeleccionado = null;
+                    return;
+                }
+                
+                const tiposPermitidos = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+                if (!tiposPermitidos.includes(archivo.type)) {
+                    alert('Tipo de archivo no permitido. Solo PDF, JPG y PNG.');
+                    input.value = '';
+                    info.classList.add('hidden');
+                    archivoSeleccionado = null;
+                    return;
+                }
+                
+                archivoSeleccionado = archivo;
+                info.innerHTML = `
+                    <i class="fas fa-file"></i> 
+                    <strong>${archivo.name}</strong><br>
+                    Tamaño: ${(archivo.size / 1024).toFixed(1)} KB
+                `;
+                info.classList.remove('hidden');
+            }
+        }
+
+        function crearPlano() {
+            const nombre = document.getElementById('nombrePlano').value.trim();
+            const cliente = document.getElementById('cliente').value.trim();
+            const descripcion = document.getElementById('descripcion').value.trim();
+            
+            if (!nombre || !cliente || !archivoSeleccionado) {
+                alert('Por favor completa todos los campos obligatorios y selecciona un archivo.');
+                return;
+            }
+            
+            const espacioActual = calcularEspacioLocalStorage();
+            const espacioEstimado = Math.round(archivoSeleccionado.size * 1.4 / 1024);
+            
+            if (espacioActual + espacioEstimado > 4500) {
+                alert(`No hay suficiente espacio de almacenamiento.\n\nEspacio actual: ${espacioActual} KB\nArchivo estimado: ${espacioEstimado} KB\nEspacio disponible: ${4500 - espacioActual} KB\n\nVe a "Mis Planos" para liberar espacio.`);
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const plano = {
+                        id: generarId(),
+                        nombre: nombre,
+                        cliente: cliente,
+                        descripcion: descripcion,
+                        fecha: new Date().toISOString(),
+                        archivo: {
+                            nombre: archivoSeleccionado.name,
+                            tipo: archivoSeleccionado.type,
+                            tamaño: archivoSeleccionado.size,
+                            datos: e.target.result
+                        }
+                    };
+                    
+                    const planos = JSON.parse(localStorage.getItem('planos') || '[]');
+                    planos.push(plano);
+                    localStorage.setItem('planos', JSON.stringify(planos));
+                    
+                    planoActual = plano;
+                    mostrarResultado();
+                    
+                } catch (error) {
+                    if (error.name === 'QuotaExceededError') {
+                        alert('Error: No hay suficiente espacio de almacenamiento.\n\nVe a "Mis Planos" para liberar espacio eliminando archivos antiguos.');
+                    } else {
+                        alert('Error al guardar el plano: ' + error.message);
+                    }
+                }
+            };
+            
+            reader.readAsDataURL(archivoSeleccionado);
+        }
+
+        function calcularEspacioLocalStorage() {
+            let total = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    total += localStorage[key].length + key.length;
+                }
+            }
+            return Math.round(total / 1024);
+        }
+
+        function generarId() {
+            return 'P' + Date.now().toString(36).toUpperCase().slice(-6);
+        }
+
+        function mostrarResultado() {
+            document.getElementById('formulario').classList.add('hidden');
+            document.getElementById('resultado').classList.remove('hidden');
+            
+            document.getElementById('planoId').textContent = planoActual.id;
+            
+            const url = `${window.location.origin}${window.location.pathname.replace('generar-simple.html', 'ver-plano-simple.html')}?id=${planoActual.id}`;
+            document.getElementById('urlPlano').textContent = url;
+            
+            generarCodigoQR('qrCodeDisplay', url);
+        }
+
+        function generarCodigoQR(containerId, data) {
+            if (typeof qrcode !== 'undefined') {
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+                
+                const qr = qrcode(0, 'M');
+                qr.addData(data);
+                qr.make();
+                
+                const img = document.createElement('img');
+                img.src = qr.createDataURL(4);
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.borderRadius = '8px';
+                container.appendChild(img);
+            } else {
+                const container = document.getElementById(containerId);
+                container.innerHTML = `
+                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f8fafc; border: 2px dashed #6b7280; border-radius: 8px;">
+                        <div style="text-align: center;">
+                            <i class="fas fa-qrcode" style="font-size: 48px; margin-bottom: 10px; color: #6b7280;"></i><br>
+                            <span style="color: #6b7280;">Generando QR...</span>
+                        </div>
+                    </div>
+                `;
+                
+                setTimeout(() => generarCodigoQR(containerId, data), 1000);
+            }
+        }
+
+        function copiarURL() {
+            const url = document.getElementById('urlPlano').textContent;
+            navigator.clipboard.writeText(url).then(function() {
+                alert('URL copiada al portapapeles');
+            }).catch(function() {
+                const textArea = document.createElement('textarea');
+                textArea.value = url;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('URL copiada al portapapeles');
+            });
+        }
+
+        function verPlano() {
+            const url = `ver-plano-simple.html?id=${planoActual.id}`;
+            window.open(url, '_blank');
+        }
+
+        function nuevoPlano() {
+            document.getElementById('resultado').classList.add('hidden');
+            document.getElementById('formulario').classList.remove('hidden');
+            
+            document.getElementById('nombrePlano').value = '';
+            document.getElementById('cliente').value = '';
+            document.getElementById('descripcion').value = '';
+            document.getElementById('archivo').value = '';
+            document.getElementById('archivoInfo').classList.add('hidden');
+            archivoSeleccionado = null;
+            planoActual = null;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Planos</title>    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary: #f8fafc;
+            --accent: #0ea5e9;
+            --accent-light: #38bdf8;
+            --background: #f1f5f9;
+            --surface: #ffffff;
+            --surface-hover: #f8fafc;
+            --border: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --radius: 8px;
+            --radius-small: 4px;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-xl: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .header {
+            background: var(--surface);
+            padding: 32px;
+            border-radius: var(--radius);
+            margin-bottom: 24px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+        }
+
+        .header h1 {
+            color: var(--text-primary);
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header h1 i {
+            color: var(--primary);
+            margin-right: 12px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        .storage-info {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: var(--radius);
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+
+        .storage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .storage-header i {
+            color: var(--primary);
+            margin-right: 8px;
+        }
+
+        .storage-bar {
+            background: var(--secondary);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+
+        .storage-used {
+            background: var(--primary);
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .storage-warning .storage-used {
+            background: var(--warning);
+        }
+
+        .storage-danger .storage-used {
+            background: var(--danger);
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
+        .btn-small {
+            padding: 8px 12px;
+            font-size: 0.8rem;
+        }
+
+        .planos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+
+        .plano-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .plano-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            background: var(--surface-hover);
+        }
+
+        .plano-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        .plano-header h3 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+            line-height: 1.3;
+            max-width: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .plano-date {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 500;
+            background: var(--secondary);
+            padding: 4px 8px;
+            border-radius: var(--radius-small);
+            white-space: nowrap;
+        }
+
+        .plano-info {
+            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+
+        .info-row i {
+            color: var(--primary);
+            width: 16px;
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-right: 8px;
+            min-width: 60px;
+        }
+
+        .info-value {
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.8rem;
+            background: var(--secondary);
+            padding: 3px 6px;
+            border-radius: var(--radius-small);
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .visitas-info {
+            color: var(--accent);
+            font-size: 0.8rem;
+            margin-top: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(14, 165, 233, 0.1);
+            padding: 6px 8px;
+            border-radius: var(--radius-small);
+            border-left: 3px solid var(--accent);
+        }
+
+        .plano-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .plano-actions .btn {
+            justify-content: center;
+            font-size: 0.8rem;
+            padding: 8px 10px;
+            white-space: nowrap;
+        }
+
+        .plano-actions .btn-danger {
+            grid-column: 1 / -1;
+            margin-top: 4px;
+        }
+
+        .no-planos {
+            text-align: center;
+            padding: 60px 40px;
+            color: var(--text-secondary);
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .no-planos i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            color: var(--text-light);
+        }
+
+        .no-planos h2 {
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .qr-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .qr-content {
+            background: var(--surface);
+            padding: 32px;
+            border-radius: var(--radius);
+            text-align: center;
+            max-width: 450px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border);
+        }
+
+        .qr-sticker {
+            background: var(--surface);
+            border: 2px solid var(--primary);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin: 24px 0;
+            display: inline-block;
+        }
+
+        .qr-code-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 16px;
+            border-radius: var(--radius-small);
+            overflow: hidden;
+        }
+
+        .qr-placeholder {
+            width: 100%;
+            height: 100%;
+            background: var(--secondary);
+            border: 2px dashed var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-small);
+            color: var(--text-light);
+            text-align: center;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .qr-info {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: left;
+            margin-top: 16px;
+            background: var(--secondary);
+            padding: 12px;
+            border-radius: var(--radius-small);
+        }
+
+        .qr-info strong {
+            color: var(--text-primary);
+        }
+
+        .url-box {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: var(--radius-small);
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            word-break: break-all;
+            margin: 16px 0;
+            max-height: 80px;
+            overflow-y: auto;
+            color: var(--text-secondary);
+        }
+
+        .modal-actions {
+            margin-top: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .planos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 16px;
+            }
+
+            .plano-card {
+                padding: 16px;
+                min-height: 200px;
+            }
+
+            .plano-header h3 {
+                font-size: 1rem;
+                max-width: 150px;
+            }
+
+            .qr-content {
+                margin: 20px;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .planos-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .plano-card {
+                padding: 16px;
+                min-height: 180px;
+            }
+
+            .plano-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .plano-actions .btn-danger {
+                grid-column: 1;
+                margin-top: 0;
+            }
+
+            .storage-header {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .info-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .info-label {
+                min-width: auto;
+            }
+
+            .info-value {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .planos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-folder-open"></i>Mis Planos</h1>
+            <div class="subtitle">Total de planos: <span id="totalPlanos">0</span></div>
+            
+            <div class="storage-info" id="storageInfo">
+                <div class="storage-header">
+                    <span><i class="fas fa-database"></i><strong>Almacenamiento:</strong> <span id="storageUsed">0</span> kB de <span id="storageTotal">5000</span> kB (<span id="storagePercent">0</span>%)</span>
+                    <button class="btn btn-danger btn-small" onclick="limpiarTodo()">
+                        <i class="fas fa-trash"></i> Limpiar Todo
+                    </button>
+                </div>
+                <div class="storage-bar">
+                    <div class="storage-used" id="storageBar" style="width: 0%"></div>
+                </div>
+                <div style="font-size: 0.85em; color: var(--text-light);">
+                    Espacio disponible: <span id="storageAvailable">5000</span> kB
+                </div>
+            </div>
+
+            <a href="index.html" class="btn">
+                <i class="fas fa-plus"></i> Subir Nuevo Plano
+            </a>
+        </div>
+
+        <div id="planosContainer" class="planos-grid">
+        </div>
+
+        <div id="noPlanos" class="no-planos" style="display: none;">
+            <i class="fas fa-folder-open"></i>
+            <h2>No tienes planos guardados</h2>
+            <p>Sube tu primer plano para comenzar a organizar tu colección</p>
+        </div>
+    </div>
+
+    <div id="qrModal" class="qr-modal">
+        <div class="qr-content">
+            <h2><i class="fas fa-qrcode"></i> Código QR del Plano</h2>
+            <div class="qr-sticker">
+                <div id="qrCodeContainer" class="qr-code-container">
+                    <div class="qr-placeholder">
+                        <i class="fas fa-qrcode"></i>
+                        <span>Generando QR...</span>
+                    </div>
+                </div>
+                <div style="font-weight: bold; margin-top: 12px; color: var(--text-primary);" id="qrPlanoNombre">Nombre del Plano</div>
+            </div>
+            
+            <div class="qr-info">
+                <strong>Información del QR:</strong><br>
+                <strong>Plano:</strong> <span id="qrInfoNombre">-</span><br>
+                <strong>Cliente:</strong> <span id="qrInfoCliente">-</span><br>
+                <strong>Fecha:</strong> <span id="qrInfoFecha">-</span><br>
+                <strong>Visitas:</strong> <span id="qrInfoVisitas">0</span>
+            </div>
+            
+            <div class="url-box" id="qrUrl">URL del plano...</div>
+            
+            <div class="modal-actions">
+                <button class="btn" onclick="descargarSticker()">
+                    <i class="fas fa-download"></i> Descargar Sticker
+                </button>
+                <button class="btn" onclick="copiarURL()">
+                    <i class="fas fa-copy"></i> Copiar URL
+                </button>
+                <button class="btn" onclick="compartirPlano()">
+                    <i class="fas fa-share"></i> Compartir
+                </button>
+                <button class="btn btn-danger" onclick="cerrarModal()">
+                    <i class="fas fa-times"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <script>
+        let planoActualQR = null;
+        let urlActual = '';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarPlanos();
+            actualizarInfoStorage();
+        });
+
+        function actualizarInfoStorage() {
+            const totalKB = calcularEspacioLocalStorage();
+            const maxKB = 5000;
+            const porcentaje = Math.round((totalKB / maxKB) * 100);
+            const disponibleKB = maxKB - totalKB;
+
+            document.getElementById('storageUsed').textContent = totalKB;
+            document.getElementById('storageTotal').textContent = maxKB;
+            document.getElementById('storagePercent').textContent = porcentaje;
+            document.getElementById('storageAvailable').textContent = disponibleKB;
+
+            const storageBar = document.getElementById('storageBar');
+            const storageInfo = document.getElementById('storageInfo');
+            
+            storageBar.style.width = `${porcentaje}%`;
+            
+            storageInfo.className = 'storage-info';
+            if (porcentaje > 80) {
+                storageInfo.classList.add('storage-danger');
+            } else if (porcentaje > 60) {
+                storageInfo.classList.add('storage-warning');
+            }
+        }
+
+        function calcularEspacioLocalStorage() {
+            let total = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    total += localStorage[key].length + key.length;
+                }
+            }
+            return Math.round(total / 1024);
+        }
+
+        function limpiarTodo() {
+            if (confirm('⚠️ ATENCIÓN: Esto eliminará TODOS tus planos guardados.\n\n¿Estás completamente seguro de que quieres continuar?\n\nEsta acción NO se puede deshacer.')) {
+                if (confirm('🚨 ÚLTIMA CONFIRMACIÓN:\n\nSe eliminarán todos los planos y archivos.\n\n¿Proceder con la eliminación total?')) {
+                    localStorage.clear();
+                    cargarPlanos();
+                    actualizarInfoStorage();
+                    alert('✅ Todos los datos han sido eliminados. El almacenamiento está ahora vacío.');
+                }
+            }
+        }
+
+        function obtenerVisitas(planoId) {
+            const visitasObj = JSON.parse(localStorage.getItem('planoVisitas') || '{}');
+            return visitasObj[planoId] || 0;
+        }
+
+        function obtenerPlanos() {
+            return JSON.parse(localStorage.getItem('planos') || '[]');
+        }
+
+        function cargarPlanos() {
+            const planos = obtenerPlanos();
+            const container = document.getElementById('planosContainer');
+            const noPlanos = document.getElementById('noPlanos');
+            
+            document.getElementById('totalPlanos').textContent = planos.length;
+            
+            if (planos.length === 0) {
+                container.style.display = 'none';
+                noPlanos.style.display = 'block';
+                return;
+            }
+            
+            container.style.display = 'grid';
+            noPlanos.style.display = 'none';
+            
+            container.innerHTML = planos.map(plano => {
+                const visitas = obtenerVisitas(plano.id) || 0;
+                return `
+                    <div class="plano-card">
+                        <div class="plano-header">
+                            <h3 title="${plano.nombre}">${plano.nombre}</h3>
+                            <div class="plano-date">${plano.fecha}</div>
+                        </div>
+                        
+                        <div class="plano-info">
+                            <div class="info-row">
+                                <i class="fas fa-user"></i>
+                                <span class="info-label">Cliente:</span>
+                                <span class="info-value" title="${plano.cliente}">${plano.cliente}</span>
+                            </div>
+                            
+                            <div class="info-row">
+                                <i class="fas fa-file"></i>
+                                <span class="info-label">Archivo:</span>
+                                <span class="info-value" title="${plano.archivo}">${plano.archivo}</span>
+                            </div>
+                            
+                            <div class="info-row">
+                                <i class="fas fa-hashtag"></i>
+                                <span class="info-label">ID:</span>
+                                <span class="info-value">${plano.id}</span>
+                            </div>
+                            
+                            ${plano.descripcion ? `
+                            <div class="info-row">
+                                <i class="fas fa-comment"></i>
+                                <span class="info-label">Descripción:</span>
+                                <span class="info-value" title="${plano.descripcion}">${plano.descripcion}</span>
+                            </div>
+                            ` : ''}
+                            
+                            <div class="visitas-info">
+                                <i class="fas fa-eye"></i>
+                                Visto ${visitas} veces
+                            </div>
+                        </div>
+                        
+                        <div class="plano-actions">
+                            <button class="btn" onclick="verPlano('${plano.id}')">
+                                <i class="fas fa-eye"></i> Ver
+                            </button>
+                            <button class="btn" onclick="mostrarQR('${plano.id}')">
+                                <i class="fas fa-qrcode"></i> QR
+                            </button>
+                            <button class="btn" onclick="compartirPlano('${plano.id}')">
+                                <i class="fas fa-share"></i> Compartir
+                            </button>
+                            <button class="btn btn-danger" onclick="eliminarPlano('${plano.id}')">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function verPlano(id) {
+            window.open(`ver-plano-simple.html?id=${id}`, '_blank');
+        }
+
+        function mostrarQR(id) {
+            const planos = JSON.parse(localStorage.getItem('planos') || '[]');
+            const plano = planos.find(p => p.id === id);
+            
+            if (plano) {
+                planoActualQR = plano;
+                urlActual = `${window.location.origin}${window.location.pathname.replace('mis-planos.html', 'ver-plano-simple.html')}?id=${plano.id}`;
+                
+                document.getElementById('qrPlanoNombre').textContent = plano.nombre;
+                document.getElementById('qrInfoNombre').textContent = plano.nombre;
+                document.getElementById('qrInfoCliente').textContent = plano.cliente;
+                document.getElementById('qrInfoFecha').textContent = new Date(plano.fecha).toLocaleDateString('es-ES');
+                document.getElementById('qrInfoVisitas').textContent = obtenerVisitas(plano.id);
+                document.getElementById('qrUrl').textContent = urlActual;
+                
+                generarCodigoQR('qrCodeContainer', urlActual);
+                
+                document.getElementById('qrModal').style.display = 'flex';
+            }
+        }
+
+        function generarCodigoQR(containerId, data) {
+            const container = document.getElementById(containerId);
+            
+            try {
+                container.innerHTML = '';
+                
+                const qr = qrcode(0, 'M');
+                qr.addData(data);
+                qr.make();
+                
+                const img = document.createElement('img');
+                img.src = qr.createDataURL(4);
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.borderRadius = '8px';
+                container.appendChild(img);
+            } catch (error) {
+                console.error('Error generando QR:', error);
+                container.innerHTML = `
+                    <div class="qr-placeholder">
+                        <i class="fas fa-qrcode" style="font-size: 2rem;"></i>
+                        <span>Error generando QR</span>
+                    </div>
+                `;
+            }
+        }
+
+        function descargarSticker() {
+            if (!planoActualQR) return;
+            
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = 400;
+            canvas.height = 450;
+            
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.strokeStyle = '#4f46e5';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+            
+            ctx.fillStyle = '#1e293b';
+            ctx.font = 'bold 24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('PLANO QR', canvas.width / 2, 45);
+            
+            ctx.font = 'bold 20px Arial';
+            ctx.fillText(planoActualQR.nombre, canvas.width / 2, 75);
+            
+            try {
+                const qr = qrcode(0, 'M');
+                qr.addData(urlActual);
+                qr.make();
+                
+                const tempImg = new Image();
+                tempImg.onload = function() {
+                    ctx.drawImage(tempImg, 100, 90, 200, 200);
+                    completarSticker();
+                };
+                tempImg.src = qr.createDataURL(4);
+            } catch (error) {
+                ctx.strokeStyle = '#ddd';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.strokeRect(100, 90, 200, 200);
+                
+                ctx.fillStyle = '#666';
+                ctx.font = '16px Arial';
+                ctx.fillText('Código QR', canvas.width / 2, 190);
+                completarSticker();
+            }
+            
+            function completarSticker() {
+                ctx.setLineDash([]);
+                ctx.font = '14px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillStyle = '#1e293b';
+                
+                ctx.fillText(`Cliente: ${planoActualQR.cliente}`, 30, 330);
+                ctx.fillText(`ID: ${planoActualQR.id}`, 30, 355);
+                ctx.fillText(`Fecha: ${new Date(planoActualQR.fecha).toLocaleDateString('es-ES')}`, 30, 380);
+                
+                const link = document.createElement('a');
+                link.download = `Sticker_QR_${planoActualQR.nombre.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            }
+        }
+
+        function copiarURL() {
+            navigator.clipboard.writeText(urlActual).then(function() {
+                alert('✅ URL copiada al portapapeles');
+            }).catch(function() {
+                const textArea = document.createElement('textarea');
+                textArea.value = urlActual;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('✅ URL copiada al portapapeles');
+            });
+        }
+
+        function compartirPlano(id) {
+            const planos = JSON.parse(localStorage.getItem('planos') || '[]');
+            const plano = planos.find(p => p.id === id);
+            
+            if (plano) {
+                const url = `${window.location.origin}${window.location.pathname.replace('mis-planos.html', 'ver-plano-simple.html')}?id=${plano.id}`;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: plano.nombre,
+                        text: `Ver plano: ${plano.nombre}`,
+                        url: url
+                    });
+                } else {
+                    navigator.clipboard.writeText(url).then(() => {
+                        alert('✅ URL copiada al portapapeles');
+                    });
+                }
+            }
+        }
+
+        function eliminarPlano(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar este plano?')) {
+                const planos = JSON.parse(localStorage.getItem('planos') || '[]');
+                const planosFiltrados = planos.filter(p => p.id !== id);
+                localStorage.setItem('planos', JSON.stringify(planosFiltrados));
+                cargarPlanos();
+                actualizarInfoStorage();
+                alert('✅ Plano eliminado correctamente');
+            }
+        }
+
+        function cerrarModal() {
+            document.getElementById('qrModal').style.display = 'none';
+        }
+
+        document.getElementById('qrModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarModal();
+            }
+        });
+    </script>
+</body>
+</html>

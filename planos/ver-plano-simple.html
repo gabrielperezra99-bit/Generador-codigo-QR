@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Plano</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Paleta profesional corporativa */
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #64748b;
+            --accent: #0ea5e9;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            
+            /* Fondos neutros y limpios */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --surface: #ffffff;
+            --surface-hover: #f8fafc;
+            
+            /* Textos */
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-light: #9ca3af;
+            --text-white: #ffffff;
+            
+            /* Bordes y sombras */
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Radios */
+            --radius: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-secondary);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid var(--primary);
+            position: relative;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .header h1 {
+            color: var(--text-primary);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .header h1 i {
+            color: var(--primary);
+        }
+        
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 500;
+            background: var(--bg-tertiary);
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            display: inline-block;
+            margin-top: 8px;
+        }
+        
+        .info-card {
+            background: var(--bg-secondary);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            margin-bottom: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .info-card:hover {
+            background: var(--surface-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-item h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-item h4 i {
+            color: var(--accent);
+        }
+        
+        .info-item p {
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        
+        .description-section {
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+        
+        .archivo-viewer {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .archivo-viewer h3 {
+            color: var(--primary);
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .archivo-viewer h3 i {
+            color: var(--accent);
+        }
+        
+        .archivo-viewer iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: var(--radius);
+            background: var(--surface);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .archivo-viewer img {
+            width: 100%;
+            max-height: 600px;
+            object-fit: contain;
+            border-radius: var(--radius);
+            background: var(--surface);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .no-preview {
+            text-align: center;
+            padding: 60px;
+            color: var(--text-secondary);
+            background: var(--bg-tertiary);
+            border-radius: var(--radius);
+            border: 2px dashed var(--border);
+        }
+        
+        .no-preview i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--text-light);
+        }
+        
+        .no-preview h4 {
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .no-preview p {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .error {
+            text-align: center;
+            padding: 60px;
+            color: var(--danger);
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--danger);
+        }
+        
+        .error i {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .error h2 {
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .watermark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0.05;
+            font-size: 5vw;
+            font-weight: bold;
+            color: var(--primary);
+            transform: rotate(-30deg);
+            text-transform: uppercase;
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .info-item {
+            animation: slideIn 0.4s ease-out;
+        }
+        
+        .info-item:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        
+        .info-item:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 16px;
+            }
+            
+            .container {
+                padding: 24px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .archivo-viewer iframe,
+            .archivo-viewer img {
+                height: 400px;
+            }
+            
+            .watermark {
+                font-size: 8vw;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .archivo-viewer {
+                padding: 16px;
+            }
+            
+            .archivo-viewer iframe,
+            .archivo-viewer img {
+                height: 300px;
+            }
+            
+            .no-preview,
+            .error {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="planoContent">
+        </div>
+        
+        <div id="error" class="error" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h2>Plano no encontrado</h2>
+            <p>El plano que buscas no existe o ha sido eliminado.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarPlano();
+        });
+
+        function cargarPlano() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const planoId = urlParams.get('id');
+            
+            if (!planoId) {
+                mostrarError();
+                return;
+            }
+
+            const planos = JSON.parse(localStorage.getItem('planos') || '[]');
+            const plano = planos.find(p => p.id === planoId);
+
+            if (!plano) {
+                mostrarError();
+                return;
+            }
+
+            mostrarPlano(plano);
+        }
+
+        function mostrarPlano(plano) {
+            const fecha = new Date(plano.fecha).toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            document.getElementById('planoContent').innerHTML = `
+                <div class="header">
+                    <h1><i class="fas fa-file-alt"></i> ${plano.nombre}</h1>
+                    <p class="subtitle">ID: ${plano.id}</p>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <h4><i class="fas fa-user"></i>Cliente</h4>
+                            <p>${plano.cliente}</p>
+                        </div>
+                        <div class="info-item">
+                            <h4><i class="fas fa-calendar"></i>Fecha</h4>
+                            <p>${fecha}</p>
+                        </div>
+                        <div class="info-item">
+                            <h4><i class="fas fa-file"></i>Archivo</h4>
+                            <p>${plano.archivo.nombre}</p>
+                        </div>
+                    </div>
+                    ${plano.descripcion ? `
+                        <div class="description-section">
+                            <h4 style="margin: 0 0 8px 0; color: var(--primary); font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-comment" style="color: var(--accent);"></i>Descripción
+                            </h4>
+                            <p style="margin: 0; color: var(--text-primary); font-weight: 500;">${plano.descripcion}</p>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div class="archivo-viewer">
+                    <div class="watermark">PLANOS QR</div>
+                    <h3><i class="fas fa-eye"></i> Vista del Plano</h3>
+                    ${generarVistaArchivo(plano.archivo)}
+                </div>
+            `;
+        }
+
+        function generarVistaArchivo(archivo) {
+            if (archivo.tipo === 'application/pdf') {
+                return `<iframe src="${archivo.datos}" type="application/pdf"></iframe>`;
+            } else if (archivo.tipo.startsWith('image/')) {
+                return `<img src="${archivo.datos}" alt="${archivo.nombre}">`;
+            } else {
+                return `
+                    <div class="no-preview">
+                        <i class="fas fa-file"></i>
+                        <h4>Vista previa no disponible</h4>
+                        <p>Archivo: ${archivo.nombre}</p>
+                        <p>Tipo: ${archivo.tipo}</p>
+                        <p>Tamaño: ${(archivo.tamaño / 1024).toFixed(1)} KB</p>
+                    </div>
+                `;
+            }
+        }
+
+        function mostrarError() {
+            document.getElementById('planoContent').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

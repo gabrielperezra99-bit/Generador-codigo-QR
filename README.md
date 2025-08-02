@@ -8,8 +8,11 @@
   
 ### Flujo de Trabajo:
 1.Subir Plano → El usuario carga un archivo desde generar-simple.html
+
 2.Generar QR → El sistema crea un código QR único con metadatos del plano
+
 3. Gestionar → Los planos se almacenan y pueden visualizarse desde mis-planos.html
+   
 4. Compartir → Los códigos QR permiten acceso rápido a los planos via ver-plano-simple.html
   
 ### Tecnologías Utilizadas:

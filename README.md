@@ -7,9 +7,9 @@
 - Visualizador : Sistema para ver planos directamente en el navegador
   
 ### Flujo de Trabajo:
-1.Subir Plano → El usuario carga un archivo desde generar-simple.html
+1. Subir Plano → El usuario carga un archivo desde generar-simple.html
 
-2.Generar QR → El sistema crea un código QR único con metadatos del plano
+2. Generar QR → El sistema crea un código QR único con metadatos del plano
 
 3. Gestionar → Los planos se almacenan y pueden visualizarse desde mis-planos.html
    

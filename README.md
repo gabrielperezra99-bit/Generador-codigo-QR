@@ -5,7 +5,7 @@
 
 • Visualización Móvil : Interfaz responsive optimizada para dispositivos móviles
 
-• Base de Datos : Gestión de datos mediante MySQL con usuarios, proyectos y planos
+• Base de Datos : Gestión de datos mediante MySQL con usuarios y planos
 
 • Dashboard : Panel de control para visualizar todos los planos guardados con filtros avanzados
 

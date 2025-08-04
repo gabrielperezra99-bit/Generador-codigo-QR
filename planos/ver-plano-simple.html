@@ -68,6 +68,7 @@
             padding: 32px;
             box-shadow: var(--shadow-lg);
             border: 1px solid var(--border);
+            animation: fadeInUp 0.6s ease-out;
         }
         
         .header {
@@ -209,7 +210,7 @@
         
         .no-preview {
             text-align: center;
-            padding: 60px;
+            padding: 60px 20px;
             color: var(--text-secondary);
             background: var(--bg-tertiary);
             border-radius: var(--radius);
@@ -217,9 +218,9 @@
         }
         
         .no-preview i {
-            font-size: 48px;
+            font-size: 3rem;
+            color: var(--accent);
             margin-bottom: 16px;
-            color: var(--text-light);
         }
         
         .no-preview h4 {
@@ -228,22 +229,17 @@
             font-weight: 600;
         }
         
-        .no-preview p {
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-        
         .error {
             text-align: center;
-            padding: 60px;
+            padding: 60px 20px;
             color: var(--danger);
-            background: var(--bg-tertiary);
+            background: #fef2f2;
             border-radius: var(--radius-lg);
-            border: 2px solid var(--danger);
+            border: 1px solid #fecaca;
         }
         
         .error i {
-            font-size: 48px;
+            font-size: 3rem;
             margin-bottom: 16px;
         }
         
@@ -251,24 +247,23 @@
             margin-bottom: 12px;
             font-weight: 600;
         }
-
-        .watermark {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-            z-index: 10;
-            opacity: 0.05;
-            font-size: 5vw;
-            font-weight: bold;
+        
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+        
+        .loading i {
+            font-size: 3rem;
             color: var(--primary);
-            transform: rotate(-30deg);
-            text-transform: uppercase;
+            margin-bottom: 16px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
         
         @keyframes fadeInUp {
@@ -280,33 +275,6 @@
                 opacity: 1; 
                 transform: translateY(0); 
             }
-        }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        .container {
-            animation: fadeInUp 0.6s ease-out;
-        }
-        
-        .info-item {
-            animation: slideIn 0.4s ease-out;
-        }
-        
-        .info-item:nth-child(2) {
-            animation-delay: 0.1s;
-        }
-        
-        .info-item:nth-child(3) {
-            animation-delay: 0.2s;
         }
         
         @media (max-width: 768px) {
@@ -332,40 +300,17 @@
             .archivo-viewer img {
                 height: 400px;
             }
-            
-            .watermark {
-                font-size: 8vw;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .container {
-                padding: 20px;
-            }
-            
-            .header h1 {
-                font-size: 1.3rem;
-            }
-            
-            .archivo-viewer {
-                padding: 16px;
-            }
-            
-            .archivo-viewer iframe,
-            .archivo-viewer img {
-                height: 300px;
-            }
-            
-            .no-preview,
-            .error {
-                padding: 40px 20px;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="planoContent">
+        <div id="loading" class="loading">
+            <i class="fas fa-spinner"></i>
+            <h3>Cargando plano...</h3>
+        </div>
+        
+        <div id="planoContent" style="display: none;">
         </div>
         
         <div id="error" class="error" style="display: none;">
@@ -380,7 +325,7 @@
             cargarPlano();
         });
 
-        function cargarPlano() {
+        async function cargarPlano() {
             const urlParams = new URLSearchParams(window.location.search);
             const planoId = urlParams.get('id');
             
@@ -389,19 +334,27 @@
                 return;
             }
 
-            const planos = JSON.parse(localStorage.getItem('planos') || '[]');
-            const plano = planos.find(p => p.id === planoId);
-
-            if (!plano) {
+            try {
+                const response = await fetch(`api/planos/get.php?id=${planoId}`);
+                
+                if (!response.ok) {
+                    throw new Error('Plano no encontrado');
+                }
+                
+                const plano = await response.json();
+                mostrarPlano(plano);
+                
+            } catch (error) {
+                console.error('Error cargando plano:', error);
                 mostrarError();
-                return;
             }
-
-            mostrarPlano(plano);
         }
 
         function mostrarPlano(plano) {
-            const fecha = new Date(plano.fecha).toLocaleDateString('es-ES', {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('planoContent').style.display = 'block';
+            
+            const fecha = new Date(plano.fecha_creacion).toLocaleDateString('es-ES', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
@@ -425,7 +378,11 @@
                         </div>
                         <div class="info-item">
                             <h4><i class="fas fa-file"></i>Archivo</h4>
-                            <p>${plano.archivo.nombre}</p>
+                            <p>${plano.archivo_nombre}</p>
+                        </div>
+                        <div class="info-item">
+                            <h4><i class="fas fa-eye"></i>Visitas</h4>
+                            <p>${plano.visitas || 0}</p>
                         </div>
                     </div>
                     ${plano.descripcion ? `
@@ -439,32 +396,38 @@
                 </div>
                 
                 <div class="archivo-viewer">
-                    <div class="watermark">PLANOS QR</div>
                     <h3><i class="fas fa-eye"></i> Vista del Plano</h3>
-                    ${generarVistaArchivo(plano.archivo)}
+                    ${generarVistaArchivo(plano)}
                 </div>
             `;
         }
 
-        function generarVistaArchivo(archivo) {
-            if (archivo.tipo === 'application/pdf') {
-                return `<iframe src="${archivo.datos}" type="application/pdf"></iframe>`;
-            } else if (archivo.tipo.startsWith('image/')) {
-                return `<img src="${archivo.datos}" alt="${archivo.nombre}">`;
+        function generarVistaArchivo(plano) {
+            const extension = plano.software.toLowerCase();
+            const archivoUrl = plano.archivo_url;
+            
+            if (extension === 'pdf') {
+                return `<iframe src="${archivoUrl}" type="application/pdf"></iframe>`;
+            } else if (['jpg', 'jpeg', 'png'].includes(extension)) {
+                return `<img src="${archivoUrl}" alt="${plano.archivo_nombre}">`;
             } else {
                 return `
                     <div class="no-preview">
                         <i class="fas fa-file"></i>
                         <h4>Vista previa no disponible</h4>
-                        <p>Archivo: ${archivo.nombre}</p>
-                        <p>Tipo: ${archivo.tipo}</p>
-                        <p>Tamaño: ${(archivo.tamaño / 1024).toFixed(1)} KB</p>
+                        <p>Archivo: ${plano.archivo_nombre}</p>
+                        <p>Tipo: ${extension.toUpperCase()}</p>
+                        <p>Tamaño: ${(plano.archivo_tamaño / 1024).toFixed(1)} KB</p>
+                        <a href="${archivoUrl}" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">
+                            <i class="fas fa-download"></i> Descargar archivo
+                        </a>
                     </div>
                 `;
             }
         }
 
         function mostrarError() {
+            document.getElementById('loading').style.display = 'none';
             document.getElementById('planoContent').style.display = 'none';
             document.getElementById('error').style.display = 'block';
         }

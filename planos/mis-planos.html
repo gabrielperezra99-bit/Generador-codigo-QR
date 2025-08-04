@@ -79,6 +79,101 @@
             font-weight: 500;
         }
 
+        .user-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 16px 24px;
+            border-radius: var(--radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .user-info .welcome-text {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .user-info .user-email {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #fbbf24;
+        }
+
+        .logout-btn {
+            background: rgba(220, 38, 38, 0.9);
+            border: 1px solid rgba(220, 38, 38, 0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--radius-small);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(220, 38, 38, 1);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .search-filters {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: var(--radius);
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-small);
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease;
+            background: var(--surface);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
         .storage-info {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -146,12 +241,30 @@
             box-shadow: var(--shadow-lg);
         }
 
+        .btn-secondary {
+            background: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--text-primary);
+        }
+
         .btn-danger {
             background: var(--danger);
         }
 
         .btn-danger:hover {
             background: #b91c1c;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #047857, #065f46);
+            transform: translateY(-1px);
         }
 
         .btn-small {
@@ -201,14 +314,12 @@
             font-weight: 600;
             margin: 0;
             line-height: 1.3;
-            max-width: 180px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            max-width: 70%;
+            word-wrap: break-word;
         }
 
         .plano-date {
-            color: var(--text-secondary);
+            color: var(--text-light);
             font-size: 0.8rem;
             font-weight: 500;
             background: var(--secondary);
@@ -218,279 +329,267 @@
         }
 
         .plano-info {
-            margin-bottom: 16px;
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
         }
 
         .info-row {
             display: flex;
             align-items: center;
-            margin-bottom: 8px;
+            gap: 8px;
             font-size: 0.85rem;
+            color: var(--text-secondary);
         }
 
         .info-row i {
             color: var(--primary);
-            width: 16px;
-            margin-right: 10px;
-            font-size: 0.9rem;
+            width: 14px;
+            text-align: center;
         }
 
         .info-label {
-            color: var(--text-secondary);
-            font-weight: 600;
-            margin-right: 8px;
+            font-weight: 500;
             min-width: 60px;
         }
 
         .info-value {
             color: var(--text-primary);
             font-weight: 500;
-            font-size: 0.8rem;
-            background: var(--secondary);
-            padding: 3px 6px;
-            border-radius: var(--radius-small);
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .visitas-info {
-            color: var(--accent);
-            font-size: 0.8rem;
-            margin-top: 12px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(14, 165, 233, 0.1);
-            padding: 6px 8px;
-            border-radius: var(--radius-small);
-            border-left: 3px solid var(--accent);
         }
 
         .plano-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
             gap: 8px;
             margin-top: auto;
         }
 
-        .plano-actions .btn {
-            justify-content: center;
+        .action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: var(--radius-small);
             font-size: 0.8rem;
-            padding: 8px 10px;
-            white-space: nowrap;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            text-decoration: none;
         }
 
-        .plano-actions .btn-danger {
-            grid-column: 1 / -1;
-            margin-top: 4px;
+        .action-btn.view {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: var(--radius-small);
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            text-decoration: none;
+        }
+
+        .action-btn.view {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-btn.view:hover {
+            background: var(--primary-dark);
+        }
+
+        .action-btn.qr {
+            background: var(--accent);
+            color: white;
+        }
+
+        .action-btn.qr:hover {
+            background: #0284c7;
+        }
+
+        .action-btn.delete {
+            background: var(--danger);
+            color: white;
+        }
+
+        .action-btn.delete:hover {
+            background: #b91c1c;
         }
 
         .no-planos {
             text-align: center;
-            padding: 60px 40px;
-            color: var(--text-secondary);
+            padding: 60px 20px;
+            color: var(--text-light);
             background: var(--surface);
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
+            border: 2px dashed var(--border);
         }
 
         .no-planos i {
-            font-size: 3rem;
-            margin-bottom: 16px;
+            font-size: 4rem;
+            margin-bottom: 20px;
             color: var(--text-light);
         }
 
         .no-planos h2 {
-            color: var(--text-primary);
-            margin-bottom: 8px;
-            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
         }
 
         .qr-modal {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
             z-index: 1000;
+            backdrop-filter: blur(4px);
         }
 
         .qr-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background: var(--surface);
             padding: 32px;
             border-radius: var(--radius);
-            text-align: center;
-            max-width: 450px;
             box-shadow: var(--shadow-xl);
-            border: 1px solid var(--border);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .qr-content h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+
+        .qr-content h2 i {
+            color: var(--primary);
+            margin-right: 8px;
         }
 
         .qr-sticker {
             background: var(--surface);
-            border: 2px solid var(--primary);
+            border: 2px solid var(--border);
             border-radius: var(--radius);
-            padding: 24px;
-            margin: 24px 0;
-            display: inline-block;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .qr-code-container {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 16px;
-            border-radius: var(--radius-small);
-            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 16px;
         }
 
         .qr-placeholder {
-            width: 100%;
-            height: 100%;
-            background: var(--secondary);
-            border: 2px dashed var(--text-light);
             display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--radius-small);
-            color: var(--text-light);
-            text-align: center;
             flex-direction: column;
+            align-items: center;
             gap: 8px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .qr-placeholder i {
+            font-size: 2rem;
         }
 
         .qr-info {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            text-align: left;
-            margin-top: 16px;
             background: var(--secondary);
-            padding: 12px;
+            padding: 16px;
             border-radius: var(--radius-small);
-        }
-
-        .qr-info strong {
-            color: var(--text-primary);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
         .url-box {
             background: var(--secondary);
-            border: 1px solid var(--border);
             padding: 12px;
             border-radius: var(--radius-small);
-            font-family: 'Courier New', monospace;
+            font-family: monospace;
             font-size: 0.8rem;
             word-break: break-all;
-            margin: 16px 0;
-            max-height: 80px;
-            overflow-y: auto;
-            color: var(--text-secondary);
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
         }
 
         .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .nav-actions {
             margin-top: 24px;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
             gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         @keyframes fadeInUp {
-            from { 
-                opacity: 0; 
-                transform: translateY(20px);
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
-            to { 
-                opacity: 1; 
+            to {
+                opacity: 1;
                 transform: translateY(0);
             }
         }
 
         @media (max-width: 768px) {
+            .user-header {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .planos-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
             body {
-                padding: 12px;
+                padding: 10px;
             }
 
             .header {
                 padding: 20px;
             }
 
-            .header h1 {
-                font-size: 1.5rem;
-            }
-
-            .planos-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 16px;
-            }
-
-            .plano-card {
+            .search-filters {
                 padding: 16px;
-                min-height: 200px;
-            }
-
-            .plano-header h3 {
-                font-size: 1rem;
-                max-width: 150px;
             }
 
             .qr-content {
-                margin: 20px;
                 padding: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .planos-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            .plano-card {
-                padding: 16px;
-                min-height: 180px;
-            }
-
-            .plano-actions {
-                grid-template-columns: 1fr;
-            }
-
-            .plano-actions .btn-danger {
-                grid-column: 1;
-                margin-top: 0;
-            }
-
-            .storage-header {
-                flex-direction: column;
-                gap: 8px;
-                text-align: center;
-            }
-
-            .info-row {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
-            }
-
-            .info-label {
-                min-width: auto;
-            }
-
-            .info-value {
-                width: 100%;
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .planos-grid {
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             }
         }
     </style>
@@ -498,39 +597,67 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-folder-open"></i>Mis Planos</h1>
+            <h1><i class="fas fa-folder-open"></i> Mis Planos</h1>
             <div class="subtitle">Total de planos: <span id="totalPlanos">0</span></div>
             
-            <div class="storage-info" id="storageInfo">
-                <div class="storage-header">
-                    <span><i class="fas fa-database"></i><strong>Almacenamiento:</strong> <span id="storageUsed">0</span> kB de <span id="storageTotal">5000</span> kB (<span id="storagePercent">0</span>%)</span>
-                    <button class="btn btn-danger btn-small" onclick="limpiarTodo()">
-                        <i class="fas fa-trash"></i> Limpiar Todo
-                    </button>
+            <div class="user-header">
+                <div class="user-info">
+                    Sesión iniciada como: <span id="userEmail" class="user-email"></span>
                 </div>
-                <div class="storage-bar">
-                    <div class="storage-used" id="storageBar" style="width: 0%"></div>
+                <button class="btn btn-small" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
+        </div>
+
+        <div class="search-filters">
+            <div class="filters-grid">
+                <div class="form-group">
+                    <label for="searchTerm">Buscar:</label>
+                    <input type="text" id="searchTerm" placeholder="Nombre o descripción...">
                 </div>
-                <div style="font-size: 0.85em; color: var(--text-light);">
-                    Espacio disponible: <span id="storageAvailable">5000</span> kB
+                <div class="form-group">
+                    <label for="filterClient">Cliente:</label>
+                    <input type="text" id="filterClient" placeholder="Filtrar por cliente...">
+                </div>
+                <div class="form-group">
+                    <label for="dateFrom">Desde:</label>
+                    <input type="date" id="dateFrom">
+                </div>
+                <div class="form-group">
+                    <label for="dateTo">Hasta:</label>
+                    <input type="date" id="dateTo">
                 </div>
             </div>
-
-            <a href="index.html" class="btn">
-                <i class="fas fa-plus"></i> Subir Nuevo Plano
-            </a>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn btn-small" onclick="applyFilters()">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+                <button class="btn btn-small btn-secondary" onclick="clearFilters()">
+                    <i class="fas fa-times"></i> Limpiar
+                </button>
+            </div>
         </div>
 
-        <div id="planosContainer" class="planos-grid">
-        </div>
-
+        <div id="planosContainer" class="planos-grid"></div>
+        
         <div id="noPlanos" class="no-planos" style="display: none;">
             <i class="fas fa-folder-open"></i>
             <h2>No tienes planos guardados</h2>
             <p>Sube tu primer plano para comenzar a organizar tu colección</p>
         </div>
+
+        <div class="nav-actions" style="margin-top: 24px; display: flex; gap: 12px; justify-content: center;">
+            <a href="index.html" class="btn btn-secondary">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <a href="generar-simple.html" class="btn">
+                <i class="fas fa-plus"></i> Subir Nuevo Plano
+            </a>
+        </div>
     </div>
 
+    <!-- Modal para mostrar QR -->
     <div id="qrModal" class="qr-modal">
         <div class="qr-content">
             <h2><i class="fas fa-qrcode"></i> Código QR del Plano</h2>
@@ -555,14 +682,11 @@
             <div class="url-box" id="qrUrl">URL del plano...</div>
             
             <div class="modal-actions">
-                <button class="btn" onclick="descargarSticker()">
-                    <i class="fas fa-download"></i> Descargar Sticker
-                </button>
                 <button class="btn" onclick="copiarURL()">
                     <i class="fas fa-copy"></i> Copiar URL
                 </button>
-                <button class="btn" onclick="compartirPlano()">
-                    <i class="fas fa-share"></i> Compartir
+                <button class="btn btn-success" onclick="descargarQRSticker()">
+                    <i class="fas fa-download"></i> Descargar Sticker
                 </button>
                 <button class="btn btn-danger" onclick="cerrarModal()">
                     <i class="fas fa-times"></i> Cerrar
@@ -572,317 +696,401 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
     <script>
+        let currentPlanos = [];
+        let currentProjects = [];
         let planoActualQR = null;
         let urlActual = '';
 
+        // Verificar autenticación al cargar
         document.addEventListener('DOMContentLoaded', function() {
-            cargarPlanos();
-            actualizarInfoStorage();
+            if (!api.isAuthenticated()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const user = api.getUser();
+            if (user) {
+                document.getElementById('userEmail').textContent = user.nombre || user.email;
+            }
+
+            loadData();
+            setupEventListeners();
         });
 
-        function actualizarInfoStorage() {
-            const totalKB = calcularEspacioLocalStorage();
-            const maxKB = 5000;
-            const porcentaje = Math.round((totalKB / maxKB) * 100);
-            const disponibleKB = maxKB - totalKB;
+        function setupEventListeners() {
+            // Filtros en tiempo real
+            document.getElementById('searchTerm').addEventListener('input', applyFilters);
+            document.getElementById('filterClient').addEventListener('input', applyFilters);
+            document.getElementById('dateFrom').addEventListener('change', applyFilters);
+            document.getElementById('dateTo').addEventListener('change', applyFilters);
+        }
 
-            document.getElementById('storageUsed').textContent = totalKB;
-            document.getElementById('storageTotal').textContent = maxKB;
-            document.getElementById('storagePercent').textContent = porcentaje;
-            document.getElementById('storageAvailable').textContent = disponibleKB;
-
-            const storageBar = document.getElementById('storageBar');
-            const storageInfo = document.getElementById('storageInfo');
-            
-            storageBar.style.width = `${porcentaje}%`;
-            
-            storageInfo.className = 'storage-info';
-            if (porcentaje > 80) {
-                storageInfo.classList.add('storage-danger');
-            } else if (porcentaje > 60) {
-                storageInfo.classList.add('storage-warning');
+        async function loadData() {
+            try {
+                // Cargar planos
+                const planosResponse = await api.getPlanos();
+                // La respuesta es directamente el array de planos
+                currentPlanos = Array.isArray(planosResponse) ? planosResponse : [];
+                displayPlanos(currentPlanos);
+                
+                console.log('Planos cargados:', currentPlanos); // Para debug
+            } catch (error) {
+                console.error('Error cargando datos:', error);
+                showNotification('Error al cargar los datos', 'error');
+                currentPlanos = [];
+                displayPlanos(currentPlanos);
             }
         }
 
-        function calcularEspacioLocalStorage() {
-            let total = 0;
-            for (let key in localStorage) {
-                if (localStorage.hasOwnProperty(key)) {
-                    total += localStorage[key].length + key.length;
-                }
-            }
-            return Math.round(total / 1024);
-        }
-
-        function limpiarTodo() {
-            if (confirm('⚠️ ATENCIÓN: Esto eliminará TODOS tus planos guardados.\n\n¿Estás completamente seguro de que quieres continuar?\n\nEsta acción NO se puede deshacer.')) {
-                if (confirm('🚨 ÚLTIMA CONFIRMACIÓN:\n\nSe eliminarán todos los planos y archivos.\n\n¿Proceder con la eliminación total?')) {
-                    localStorage.clear();
-                    cargarPlanos();
-                    actualizarInfoStorage();
-                    alert('✅ Todos los datos han sido eliminados. El almacenamiento está ahora vacío.');
-                }
-            }
-        }
-
-        function obtenerVisitas(planoId) {
-            const visitasObj = JSON.parse(localStorage.getItem('planoVisitas') || '{}');
-            return visitasObj[planoId] || 0;
-        }
-
-        function obtenerPlanos() {
-            return JSON.parse(localStorage.getItem('planos') || '[]');
-        }
-
-        function cargarPlanos() {
-            const planos = obtenerPlanos();
+        function displayPlanos(planos) {
             const container = document.getElementById('planosContainer');
             const noPlanos = document.getElementById('noPlanos');
-            
+
+            // Actualizar contador de planos
             document.getElementById('totalPlanos').textContent = planos.length;
-            
+
             if (planos.length === 0) {
                 container.style.display = 'none';
                 noPlanos.style.display = 'block';
                 return;
             }
-            
+
             container.style.display = 'grid';
             noPlanos.style.display = 'none';
-            
-            container.innerHTML = planos.map(plano => {
-                const visitas = obtenerVisitas(plano.id) || 0;
-                return `
-                    <div class="plano-card">
-                        <div class="plano-header">
-                            <h3 title="${plano.nombre}">${plano.nombre}</h3>
-                            <div class="plano-date">${plano.fecha}</div>
-                        </div>
-                        
-                        <div class="plano-info">
-                            <div class="info-row">
-                                <i class="fas fa-user"></i>
-                                <span class="info-label">Cliente:</span>
-                                <span class="info-value" title="${plano.cliente}">${plano.cliente}</span>
-                            </div>
-                            
-                            <div class="info-row">
-                                <i class="fas fa-file"></i>
-                                <span class="info-label">Archivo:</span>
-                                <span class="info-value" title="${plano.archivo}">${plano.archivo}</span>
-                            </div>
-                            
-                            <div class="info-row">
-                                <i class="fas fa-hashtag"></i>
-                                <span class="info-label">ID:</span>
-                                <span class="info-value">${plano.id}</span>
-                            </div>
-                            
-                            ${plano.descripcion ? `
-                            <div class="info-row">
-                                <i class="fas fa-comment"></i>
-                                <span class="info-label">Descripción:</span>
-                                <span class="info-value" title="${plano.descripcion}">${plano.descripcion}</span>
-                            </div>
-                            ` : ''}
-                            
-                            <div class="visitas-info">
-                                <i class="fas fa-eye"></i>
-                                Visto ${visitas} veces
-                            </div>
-                        </div>
-                        
-                        <div class="plano-actions">
-                            <button class="btn" onclick="verPlano('${plano.id}')">
-                                <i class="fas fa-eye"></i> Ver
-                            </button>
-                            <button class="btn" onclick="mostrarQR('${plano.id}')">
-                                <i class="fas fa-qrcode"></i> QR
-                            </button>
-                            <button class="btn" onclick="compartirPlano('${plano.id}')">
-                                <i class="fas fa-share"></i> Compartir
-                            </button>
-                            <button class="btn btn-danger" onclick="eliminarPlano('${plano.id}')">
-                                <i class="fas fa-trash"></i> Eliminar
-                            </button>
-                        </div>
+
+            container.innerHTML = planos.map(plano => `
+                <div class="plano-card">
+                    <div class="plano-header">
+                        <h3 title="${plano.nombre}">${plano.nombre}</h3>
+                        <div class="plano-date">${formatDate(plano.fecha_creacion)}</div>
                     </div>
-                `;
-            }).join('');
+                    
+                    <div class="plano-info">
+                        ${plano.cliente ? `
+                        <div class="info-row">
+                            <i class="fas fa-user"></i>
+                            <span class="info-label">Cliente:</span>
+                            <span class="info-value">${plano.cliente}</span>
+                        </div>
+                        ` : ''}
+                        
+                        <div class="info-row">
+                            <i class="fas fa-eye"></i>
+                            <span class="info-label">Visitas:</span>
+                            <span class="info-value">${plano.visitas || 0}</span>
+                        </div>
+                        
+                        ${plano.descripcion ? `
+                        <div class="info-row">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="info-label">Descripción:</span>
+                            <span class="info-value">${plano.descripcion}</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="plano-actions">
+                        <a href="ver-plano-simple.html?id=${plano.id}" class="action-btn view" title="Ver plano">
+                            <i class="fas fa-eye"></i> Ver
+                        </a>
+                        <button class="action-btn qr" onclick="mostrarQR(${plano.id})" title="Generar QR">
+                            <i class="fas fa-qrcode"></i> QR
+                        </button>
+                        <button class="action-btn delete" onclick="eliminarPlano(${plano.id})" title="Eliminar">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        function verPlano(id) {
-            window.open(`ver-plano-simple.html?id=${id}`, '_blank');
-        }
-
-        function mostrarQR(id) {
-            const planos = JSON.parse(localStorage.getItem('planos') || '[]');
-            const plano = planos.find(p => p.id === id);
+        function populateProjectFilter() {
+            const select = document.getElementById('filterProject');
+            select.innerHTML = '<option value="">Todos los proyectos</option>';
             
-            if (plano) {
+            currentProjects.forEach(project => {
+                const option = document.createElement('option');
+                option.value = project.id;
+                option.textContent = project.nombre;
+                select.appendChild(option);
+            });
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchTerm').value.toLowerCase();
+            const filterClient = document.getElementById('filterClient').value.toLowerCase();
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+
+            let filteredPlanos = currentPlanos.filter(plano => {
+                // Filtro de búsqueda general
+                const matchesSearch = !searchTerm || 
+                    plano.nombre.toLowerCase().includes(searchTerm) ||
+                    (plano.descripcion && plano.descripcion.toLowerCase().includes(searchTerm));
+
+                // Filtro de cliente
+                const matchesClient = !filterClient || 
+                    (plano.cliente && plano.cliente.toLowerCase().includes(filterClient));
+
+                // Filtro de fecha
+                let matchesDate = true;
+                if (dateFrom || dateTo) {
+                    const planoDate = new Date(plano.fecha_creacion);
+                    if (dateFrom) {
+                        const fromDate = new Date(dateFrom);
+                        matchesDate = matchesDate && planoDate >= fromDate;
+                    }
+                    if (dateTo) {
+                        const toDate = new Date(dateTo);
+                        toDate.setHours(23, 59, 59, 999); // Incluir todo el día
+                        matchesDate = matchesDate && planoDate <= toDate;
+                    }
+                }
+
+                return matchesSearch && matchesClient && matchesDate;
+            });
+
+            displayPlanos(filteredPlanos);
+        }
+
+        function clearFilters() {
+            document.getElementById('searchTerm').value = '';
+            document.getElementById('filterClient').value = '';
+            document.getElementById('dateFrom').value = '';
+            document.getElementById('dateTo').value = '';
+            displayPlanos(currentPlanos);
+        }
+
+        async function mostrarQR(planoId) {
+            try {
+                const plano = currentPlanos.find(p => p.id == planoId);
+                if (!plano) {
+                    showNotification('Plano no encontrado', 'error');
+                    return;
+                }
+
                 planoActualQR = plano;
-                urlActual = `${window.location.origin}${window.location.pathname.replace('mis-planos.html', 'ver-plano-simple.html')}?id=${plano.id}`;
-                
+                urlActual = `${window.location.origin}/ver-plano-simple.html?id=${plano.id}`;
+
+                // Actualizar información del modal
                 document.getElementById('qrPlanoNombre').textContent = plano.nombre;
                 document.getElementById('qrInfoNombre').textContent = plano.nombre;
-                document.getElementById('qrInfoCliente').textContent = plano.cliente;
-                document.getElementById('qrInfoFecha').textContent = new Date(plano.fecha).toLocaleDateString('es-ES');
-                document.getElementById('qrInfoVisitas').textContent = obtenerVisitas(plano.id);
+                document.getElementById('qrInfoCliente').textContent = plano.cliente || 'No especificado';
+                document.getElementById('qrInfoFecha').textContent = formatDate(plano.fecha_creacion);
+                document.getElementById('qrInfoVisitas').textContent = plano.visitas || 0;
                 document.getElementById('qrUrl').textContent = urlActual;
-                
-                generarCodigoQR('qrCodeContainer', urlActual);
-                
-                document.getElementById('qrModal').style.display = 'flex';
+
+                // Generar QR
+                generarQR(urlActual);
+
+                // Mostrar modal
+                document.getElementById('qrModal').style.display = 'block';
+            } catch (error) {
+                console.error('Error mostrando QR:', error);
+                showNotification('Error al generar QR', 'error');
             }
         }
 
-        function generarCodigoQR(containerId, data) {
-            const container = document.getElementById(containerId);
-            
+        function generarQR(url) {
+            const container = document.getElementById('qrCodeContainer');
+            container.innerHTML = '';
+
             try {
-                container.innerHTML = '';
-                
                 const qr = qrcode(0, 'M');
-                qr.addData(data);
+                qr.addData(url);
                 qr.make();
+
+                const qrElement = document.createElement('div');
+                qrElement.innerHTML = qr.createImgTag(4);
+                container.appendChild(qrElement);
                 
-                const img = document.createElement('img');
-                img.src = qr.createDataURL(4);
-                img.style.width = '100%';
-                img.style.height = '100%';
-                img.style.borderRadius = '8px';
-                container.appendChild(img);
+                // Guardar el QR para descarga
+                window.currentQRCode = qr;
             } catch (error) {
                 console.error('Error generando QR:', error);
-                container.innerHTML = `
-                    <div class="qr-placeholder">
-                        <i class="fas fa-qrcode" style="font-size: 2rem;"></i>
-                        <span>Error generando QR</span>
-                    </div>
-                `;
-            }
-        }
-
-        function descargarSticker() {
-            if (!planoActualQR) return;
-            
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = 400;
-            canvas.height = 450;
-            
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.strokeStyle = '#4f46e5';
-            ctx.lineWidth = 4;
-            ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
-            
-            ctx.fillStyle = '#1e293b';
-            ctx.font = 'bold 24px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('PLANO QR', canvas.width / 2, 45);
-            
-            ctx.font = 'bold 20px Arial';
-            ctx.fillText(planoActualQR.nombre, canvas.width / 2, 75);
-            
-            try {
-                const qr = qrcode(0, 'M');
-                qr.addData(urlActual);
-                qr.make();
-                
-                const tempImg = new Image();
-                tempImg.onload = function() {
-                    ctx.drawImage(tempImg, 100, 90, 200, 200);
-                    completarSticker();
-                };
-                tempImg.src = qr.createDataURL(4);
-            } catch (error) {
-                ctx.strokeStyle = '#ddd';
-                ctx.lineWidth = 2;
-                ctx.setLineDash([5, 5]);
-                ctx.strokeRect(100, 90, 200, 200);
-                
-                ctx.fillStyle = '#666';
-                ctx.font = '16px Arial';
-                ctx.fillText('Código QR', canvas.width / 2, 190);
-                completarSticker();
-            }
-            
-            function completarSticker() {
-                ctx.setLineDash([]);
-                ctx.font = '14px Arial';
-                ctx.textAlign = 'left';
-                ctx.fillStyle = '#1e293b';
-                
-                ctx.fillText(`Cliente: ${planoActualQR.cliente}`, 30, 330);
-                ctx.fillText(`ID: ${planoActualQR.id}`, 30, 355);
-                ctx.fillText(`Fecha: ${new Date(planoActualQR.fecha).toLocaleDateString('es-ES')}`, 30, 380);
-                
-                const link = document.createElement('a');
-                link.download = `Sticker_QR_${planoActualQR.nombre.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
-                link.href = canvas.toDataURL();
-                link.click();
+                container.innerHTML = '<div class="qr-placeholder"><i class="fas fa-exclamation-triangle"></i><span>Error generando QR</span></div>';
             }
         }
 
         function copiarURL() {
-            navigator.clipboard.writeText(urlActual).then(function() {
-                alert('✅ URL copiada al portapapeles');
-            }).catch(function() {
-                const textArea = document.createElement('textarea');
-                textArea.value = urlActual;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert('✅ URL copiada al portapapeles');
+            navigator.clipboard.writeText(urlActual).then(() => {
+                showNotification('URL copiada al portapapeles', 'success');
+            }).catch(() => {
+                showNotification('Error al copiar URL', 'error');
             });
-        }
-
-        function compartirPlano(id) {
-            const planos = JSON.parse(localStorage.getItem('planos') || '[]');
-            const plano = planos.find(p => p.id === id);
-            
-            if (plano) {
-                const url = `${window.location.origin}${window.location.pathname.replace('mis-planos.html', 'ver-plano-simple.html')}?id=${plano.id}`;
-                
-                if (navigator.share) {
-                    navigator.share({
-                        title: plano.nombre,
-                        text: `Ver plano: ${plano.nombre}`,
-                        url: url
-                    });
-                } else {
-                    navigator.clipboard.writeText(url).then(() => {
-                        alert('✅ URL copiada al portapapeles');
-                    });
-                }
-            }
-        }
-
-        function eliminarPlano(id) {
-            if (confirm('¿Estás seguro de que quieres eliminar este plano?')) {
-                const planos = JSON.parse(localStorage.getItem('planos') || '[]');
-                const planosFiltrados = planos.filter(p => p.id !== id);
-                localStorage.setItem('planos', JSON.stringify(planosFiltrados));
-                cargarPlanos();
-                actualizarInfoStorage();
-                alert('✅ Plano eliminado correctamente');
-            }
         }
 
         function cerrarModal() {
             document.getElementById('qrModal').style.display = 'none';
         }
 
+        async function eliminarPlano(planoId) {
+            if (!confirm('¿Estás seguro de que quieres eliminar este plano? Esta acción no se puede deshacer.')) {
+                return;
+            }
+
+            try {
+                await api.deletePlano(planoId);
+                showNotification('Plano eliminado correctamente', 'success');
+                
+                // Recargar datos
+                await loadData();
+            } catch (error) {
+                console.error('Error eliminando plano:', error);
+                showNotification('Error al eliminar el plano', 'error');
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            // Crear elemento de notificación
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                border-radius: 6px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                animation: slideInRight 0.3s ease;
+                max-width: 300px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            `;
+
+            // Colores según el tipo
+            const colors = {
+                success: '#059669',
+                error: '#dc2626',
+                warning: '#d97706',
+                info: '#2563eb'
+            };
+
+            notification.style.backgroundColor = colors[type] || colors.info;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            // Remover después de 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        function descargarQRSticker() {
+            if (!window.currentQRCode || !planoActualQR) {
+                showNotification('Error: QR no disponible', 'error');
+                return;
+            }
+
+            try {
+                // Crear canvas para el sticker
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Configurar tamaño del sticker (formato compacto)
+                const stickerWidth = 400;
+                const stickerHeight = 300;
+                canvas.width = stickerWidth;
+                canvas.height = stickerHeight;
+                
+                // Fondo blanco
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, stickerWidth, stickerHeight);
+                
+                // Generar QR como imagen
+                const qrSize = 150;
+                const qrX = (stickerWidth - qrSize) / 2;
+                const qrY = 20;
+                
+                // Crear imagen del QR
+                const qrDataURL = window.currentQRCode.createDataURL(4);
+                const qrImg = new Image();
+                
+                qrImg.onload = function() {
+                    // Dibujar QR
+                    ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+                    
+                    // Configurar texto
+                    ctx.fillStyle = '#333333';
+                    ctx.textAlign = 'center';
+                    
+                    // Título del plano
+                    ctx.font = 'bold 16px Arial';
+                    const nombreTexto = planoActualQR.nombre.length > 30 ? 
+                        planoActualQR.nombre.substring(0, 30) + '...' : 
+                        planoActualQR.nombre;
+                    ctx.fillText(nombreTexto, stickerWidth / 2, qrY + qrSize + 25);
+                    
+                    // Cliente
+                    ctx.font = '12px Arial';
+                    if (planoActualQR.cliente) {
+                        ctx.fillText(`Cliente: ${planoActualQR.cliente}`, stickerWidth / 2, qrY + qrSize + 45);
+                    }
+                    
+                    // Fecha
+                    ctx.fillText(`Fecha: ${formatDate(planoActualQR.fecha_creacion)}`, stickerWidth / 2, qrY + qrSize + 65);
+                    
+                    // Descargar
+                    const link = document.createElement('a');
+                    link.download = `QR_${planoActualQR.nombre.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    
+                    showNotification('Sticker QR descargado correctamente', 'success');
+                };
+                
+                qrImg.src = qrDataURL;
+                
+            } catch (error) {
+                console.error('Error descargando QR:', error);
+                showNotification('Error al descargar el sticker QR', 'error');
+            }
+        }
+
+        function logout() {
+            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+                api.logout();
+            }
+        }
+
+        // Cerrar modal al hacer clic fuera
         document.getElementById('qrModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 cerrarModal();
             }
         });
+
+        // Agregar estilos para las animaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>

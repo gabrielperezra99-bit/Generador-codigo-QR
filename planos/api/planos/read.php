@@ -22,20 +22,18 @@ try {
         echo json_encode(['message' => 'Token inválido']);
         exit;
     }
-    
+     
     $usuario_id = $user_data['id'];
     
     // Crear conexión a la base de datos
     $database = new Database();
     $db = $database->getConnection();
     
-    // Obtener planos del usuario usando la estructura actual
-    $query = "SELECT p.id, p.nombre, p.archivo_url, p.software, p.qr_code, p.metadata, p.fecha_subida,
-                     pr.nombre as proyecto_nombre, pr.cliente, pr.descripcion as proyecto_descripcion
-              FROM planos p 
-              INNER JOIN proyectos pr ON p.proyecto_id = pr.id 
-              WHERE pr.usuario_id = :usuario_id 
-              ORDER BY p.fecha_subida DESC";
+    // Obtener planos del usuario directamente de la tabla planos
+    $query = "SELECT id, nombre, cliente, descripcion, archivo_url, formato, qr_code, metadata, version, fecha_subida
+              FROM planos 
+              WHERE usuario_id = :usuario_id 
+              ORDER BY fecha_subida DESC";
     
     $stmt = $db->prepare($query);
     $stmt->bindParam(":usuario_id", $usuario_id);
@@ -46,21 +44,21 @@ try {
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $metadata = json_decode($row['metadata'], true) ?? [];
         
-        $plano_item = [
+        $plano = [
             'id' => $row['id'],
             'nombre' => $row['nombre'],
             'cliente' => $row['cliente'],
-            'descripcion' => $row['proyecto_descripcion'],
+            'descripcion' => $row['descripcion'],
             'archivo_nombre' => $metadata['archivo_nombre'] ?? $row['nombre'],
-            'archivo_ruta' => $row['archivo_url'],
+            'archivo_url' => $row['archivo_url'],
             'archivo_tamaño' => $metadata['archivo_tamaño'] ?? 0,
             'fecha_creacion' => $row['fecha_subida'],
-            'qr_data' => $row['qr_code'],
-            'proyecto_nombre' => $row['proyecto_nombre'],
-            'software' => $row['software']
+            'qr_code' => $row['qr_code'],
+            'formato' => $row['formato'],
+            'visitas' => intval($row['version'] ?? 0)
         ];
         
-        $planos[] = $plano_item;
+        $planos[] = $plano; // Corregido: era $plano_item, ahora es $plano
     }
     
     echo json_encode($planos);

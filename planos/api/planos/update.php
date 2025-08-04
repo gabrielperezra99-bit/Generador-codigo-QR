@@ -39,7 +39,7 @@ if(!empty($data->id) && !empty($data->nombre)) {
     $plano->id = $data->id;
     
     // Verificar que el plano pertenece al usuario
-    if($plano->readOne() && $plano->user_id == $decoded['user_id']) {
+    if($plano->readOne() && $plano->usuario_id == $decoded['user_id']) {
         $plano->nombre = $data->nombre;
         $plano->descripcion = isset($data->descripcion) ? $data->descripcion : '';
         $plano->cliente = isset($data->cliente) ? $data->cliente : '';

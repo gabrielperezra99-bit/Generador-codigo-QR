@@ -33,7 +33,7 @@ if (!$decoded) {
     exit();
 }
 
-$user_id = $decoded['user_id'];
+$usuario_id = $decoded['user_id'];
 
 // Obtener parámetros de búsqueda
 $search = isset($_GET['search']) ? $_GET['search'] : '';
@@ -42,9 +42,9 @@ $fecha_desde = isset($_GET['fecha_desde']) ? $_GET['fecha_desde'] : '';
 $fecha_hasta = isset($_GET['fecha_hasta']) ? $_GET['fecha_hasta'] : '';
 
 try {
-    $query = "SELECT * FROM planos WHERE user_id = :user_id";
+    $query = "SELECT * FROM planos WHERE usuario_id = :usuario_id";
     
-    $params = array(':user_id' => $user_id);
+    $params = array(':usuario_id' => $usuario_id);
     
     if (!empty($search)) {
         $query .= " AND (nombre LIKE :search OR descripcion LIKE :search)";
@@ -57,16 +57,16 @@ try {
     }
     
     if (!empty($fecha_desde)) {
-        $query .= " AND DATE(fecha_creacion) >= :fecha_desde";
+        $query .= " AND DATE(fecha_subida) >= :fecha_desde";
         $params[':fecha_desde'] = $fecha_desde;
     }
     
     if (!empty($fecha_hasta)) {
-        $query .= " AND DATE(fecha_creacion) <= :fecha_hasta";
+        $query .= " AND DATE(fecha_subida) <= :fecha_hasta";
         $params[':fecha_hasta'] = $fecha_hasta;
     }
     
-    $query .= " ORDER BY fecha_creacion DESC";
+    $query .= " ORDER BY fecha_subida DESC";
     
     $stmt = $db->prepare($query);
     $stmt->execute($params);
@@ -78,18 +78,21 @@ try {
         $planos_arr["records"] = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $metadata = json_decode($row['metadata'], true) ?? [];
+            
             $plano_item = array(
                 "id" => $row['id'],
-                "user_id" => $row['user_id'],
+                "usuario_id" => $row['usuario_id'],
                 "nombre" => $row['nombre'],
                 "descripcion" => $row['descripcion'],
                 "cliente" => $row['cliente'],
-                "archivo_nombre" => $row['archivo_nombre'],
-                "archivo_ruta" => $row['archivo_ruta'],
-                "archivo_tamaño" => $row['archivo_tamaño'],
-                "fecha_creacion" => $row['fecha_creacion'],
-                "visitas" => $row['visitas'],
-                "qr_data" => $row['qr_data']
+                "archivo_nombre" => $metadata['archivo_nombre'] ?? $row['nombre'],
+                "archivo_ruta" => $row['archivo_url'],
+                "archivo_tamaño" => $metadata['archivo_tamaño'] ?? 0,
+                "fecha_creacion" => $row['fecha_subida'],
+                "visitas" => $row['version'] ?? 0,
+                "qr_data" => $row['qr_code'],
+                "formato" => $row['formato']
             );
 
             array_push($planos_arr["records"], $plano_item);

@@ -53,5 +53,15 @@ class User {
 
         return false;
     }
+
+    // Método faltante para verificar contraseña
+    public function verifyPassword($password) {
+        return password_verify($password, $this->password_hash);
+    }
+
+    // Método para hashear contraseña (útil para registro)
+    public function hashPassword($password) {
+        $this->password_hash = password_hash($password, PASSWORD_DEFAULT);
+    }
 }
 ?>

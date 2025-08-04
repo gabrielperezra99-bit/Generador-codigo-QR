@@ -1,84 +1,116 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: DELETE");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+require_once '../config/cors.php';
+require_once '../config/database.php';
+require_once '../utils/jwt.php';
 
-include_once '../config/database.php';
-include_once '../utils/jwt.php';
+header('Content-Type: application/json');
 
-$database = new Database();
-$db = $database->getConnection();
-$jwt = new JWTHandler();
-
-// Verificar token JWT
-$headers = apache_request_headers();
-$authHeader = isset($headers['Authorization']) ? $headers['Authorization'] : '';
-
-if (empty($authHeader) || !preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
-    http_response_code(401);
-    echo json_encode(array("message" => "Token de acceso requerido."));
-    exit();
+if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
+    http_response_code(405);
+    echo json_encode(['message' => 'Método no permitido']);
+    exit;
 }
 
-$token = $matches[1];
-$decoded = $jwt->validateToken($token);
-
-if (!$decoded) {
-    http_response_code(401);
-    echo json_encode(array("message" => "Token inválido."));
-    exit();
-}
-
-$data = json_decode(file_get_contents("php://input"));
-
-if(!empty($data->id)) {
-    try {
-        // Verificar que el plano pertenece al usuario a través del proyecto
-        $query = "SELECT p.id, p.archivo_url, p.metadata, pr.usuario_id 
-                  FROM planos p 
-                  INNER JOIN proyectos pr ON p.proyecto_id = pr.id 
-                  WHERE p.id = :plano_id AND pr.usuario_id = :usuario_id";
-        
-        $stmt = $db->prepare($query);
-        $stmt->bindParam(":plano_id", $data->id);
-        $stmt->bindParam(":usuario_id", $decoded['user_id']);
-        $stmt->execute();
-        
-        $plano = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if ($plano) {
-            // Eliminar archivo físico si existe
-            if (!empty($plano['archivo_url'])) {
-                $archivo_path = "../../" . $plano['archivo_url'];
-                if (file_exists($archivo_path)) {
-                    unlink($archivo_path);
-                }
+try {
+    // Verificar token JWT
+    $jwt = new JWTHandler();
+    $token = $jwt->getTokenFromHeader();
+    
+    if (!$token) {
+        http_response_code(401);
+        echo json_encode(['message' => 'Token de autorización requerido']);
+        exit;
+    }
+    
+    $user_data = $jwt->validateToken($token);
+    if (!$user_data) {
+        http_response_code(401);
+        echo json_encode(['message' => 'Token inválido']);
+        exit;
+    }
+    
+    $usuario_id = $user_data['id']; // Corregido: usar 'id' en lugar de 'user_id'
+    
+    // Obtener datos del DELETE
+    $data = json_decode(file_get_contents("php://input"));
+    
+    if (empty($data->id)) {
+        http_response_code(400);
+        echo json_encode(['message' => 'ID del plano requerido']);
+        exit;
+    }
+    
+    // Crear conexión a la base de datos
+    $database = new Database();
+    $db = $database->getConnection();
+    
+    if (!$db) {
+        http_response_code(500);
+        echo json_encode(['message' => 'Error de conexión a la base de datos']);
+        exit;
+    }
+    
+    // Verificar que el plano pertenece al usuario
+    $query = "SELECT id, archivo_url, metadata 
+              FROM planos 
+              WHERE id = :plano_id AND usuario_id = :usuario_id";
+     
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(":plano_id", $data->id);
+    $stmt->bindParam(":usuario_id", $usuario_id);
+    $stmt->execute();
+    
+    $plano = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$plano) {
+        http_response_code(404);
+        echo json_encode(['message' => 'Plano no encontrado o sin permisos']);
+        exit;
+    }
+    
+    // Eliminar archivo físico si existe
+    if (!empty($plano['archivo_url'])) {
+        $archivo_path = "../../" . $plano['archivo_url'];
+        if (file_exists($archivo_path)) {
+            if (!unlink($archivo_path)) {
+                error_log("No se pudo eliminar el archivo: " . $archivo_path);
             }
-            
-            // Eliminar el plano de la base de datos
-            $delete_query = "DELETE FROM planos WHERE id = :id";
-            $delete_stmt = $db->prepare($delete_query);
-            $delete_stmt->bindParam(":id", $data->id);
-            
-            if ($delete_stmt->execute()) {
-                http_response_code(200);
-                echo json_encode(array("message" => "Plano eliminado exitosamente."));
-            } else {
-                http_response_code(503);
-                echo json_encode(array("message" => "No se pudo eliminar el plano."));
-            }
+        }
+    }
+    
+    // Eliminar el plano de la base de datos
+    $delete_query = "DELETE FROM planos WHERE id = :id AND usuario_id = :usuario_id";
+    $delete_stmt = $db->prepare($delete_query);
+    $delete_stmt->bindParam(":id", $data->id);
+    $delete_stmt->bindParam(":usuario_id", $usuario_id);
+    
+    if ($delete_stmt->execute()) {
+        if ($delete_stmt->rowCount() > 0) {
+            echo json_encode([
+                'success' => true,
+                'message' => 'Plano eliminado exitosamente'
+            ]);
         } else {
             http_response_code(404);
-            echo json_encode(array("message" => "Plano no encontrado o sin permisos."));
+            echo json_encode([
+                'success' => false,
+                'message' => 'No se encontró el plano para eliminar'
+            ]);
         }
-    } catch (Exception $e) {
-        error_log("Error eliminando plano: " . $e->getMessage());
+    } else {
         http_response_code(500);
-        echo json_encode(array("message" => "Error interno del servidor."));
+        echo json_encode([
+            'success' => false,
+            'message' => 'Error al eliminar el plano de la base de datos'
+        ]);
     }
-} else {
-    http_response_code(400);
-    echo json_encode(array("message" => "ID del plano requerido."));
+    
+} catch (Exception $e) {
+    error_log("Error eliminando plano: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Error interno del servidor'
+    ]);
 }
 ?>

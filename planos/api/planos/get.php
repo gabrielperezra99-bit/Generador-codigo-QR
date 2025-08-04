@@ -30,13 +30,11 @@ try {
         exit;
     }
     
-    // Obtener plano específico usando tu estructura actual
-    $query = "SELECT p.id, p.nombre, p.archivo_url, p.software, p.qr_code, p.metadata, p.fecha_subida,
-                     pr.nombre as proyecto_nombre, pr.cliente, pr.descripcion as proyecto_descripcion
-              FROM planos p 
-              INNER JOIN proyectos pr ON p.proyecto_id = pr.id 
-              WHERE p.id = :plano_id";
-    
+    // Obtener plano específico directamente de la tabla planos
+    $query = "SELECT id, nombre, cliente, descripcion, archivo_url, formato, qr_code, metadata, version, fecha_subida
+              FROM planos 
+              WHERE id = :plano_id";
+     
     $stmt = $db->prepare($query);
     $stmt->bindParam(":plano_id", $plano_id);
     $stmt->execute();
@@ -50,8 +48,11 @@ try {
     }
     
     // Incrementar visitas
-    $update_query = "UPDATE planos SET version = COALESCE(version, '0') + 1 WHERE id = :plano_id";
+    $current_version = intval($row['version'] ?? 0);
+    $new_version = $current_version + 1;
+    $update_query = "UPDATE planos SET version = :version WHERE id = :plano_id";
     $update_stmt = $db->prepare($update_query);
+    $update_stmt->bindParam(":version", $new_version);
     $update_stmt->bindParam(":plano_id", $plano_id);
     $update_stmt->execute();
     
@@ -61,15 +62,14 @@ try {
         'id' => $row['id'],
         'nombre' => $row['nombre'],
         'cliente' => $row['cliente'],
-        'descripcion' => $row['proyecto_descripcion'],
+        'descripcion' => $row['descripcion'],
         'archivo_nombre' => $metadata['archivo_nombre'] ?? $row['nombre'],
         'archivo_url' => $row['archivo_url'],
         'archivo_tamaño' => $metadata['archivo_tamaño'] ?? 0,
         'fecha_creacion' => $row['fecha_subida'],
         'qr_code' => $row['qr_code'],
-        'proyecto_nombre' => $row['proyecto_nombre'],
-        'software' => $row['software'],
-        'visitas' => $row['version'] ?? 0
+        'formato' => $row['formato'],
+        'visitas' => $new_version
     ];
     
     echo json_encode($plano);

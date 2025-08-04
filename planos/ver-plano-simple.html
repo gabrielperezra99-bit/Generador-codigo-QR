@@ -329,6 +329,8 @@
             const urlParams = new URLSearchParams(window.location.search);
             const planoId = urlParams.get('id');
             
+            console.log('ID del plano:', planoId);
+            
             if (!planoId) {
                 mostrarError();
                 return;
@@ -337,11 +339,14 @@
             try {
                 const response = await fetch(`api/planos/get.php?id=${planoId}`);
                 
+                console.log('Respuesta de la API:', response.status);
+                
                 if (!response.ok) {
                     throw new Error('Plano no encontrado');
                 }
                 
                 const plano = await response.json();
+                console.log('Datos del plano:', plano);
                 mostrarPlano(plano);
                 
             } catch (error) {
@@ -380,10 +385,7 @@
                             <h4><i class="fas fa-file"></i>Archivo</h4>
                             <p>${plano.archivo_nombre}</p>
                         </div>
-                        <div class="info-item">
-                            <h4><i class="fas fa-eye"></i>Visitas</h4>
-                            <p>${plano.visitas || 0}</p>
-                        </div>
+
                     </div>
                     ${plano.descripcion ? `
                         <div class="description-section">
@@ -403,20 +405,28 @@
         }
 
         function generarVistaArchivo(plano) {
-            const extension = plano.software.toLowerCase();
+            // Extraer extensión del archivo_url en lugar de usar formato
             const archivoUrl = plano.archivo_url;
+            const extension = archivoUrl.split('.').pop().toLowerCase();
+            
+            console.log('Archivo URL:', archivoUrl);
+            console.log('Extensión detectada:', extension);
+            console.log('Formato field:', plano.formato);
             
             if (extension === 'pdf') {
+                console.log('Mostrando como PDF');
                 return `<iframe src="${archivoUrl}" type="application/pdf"></iframe>`;
             } else if (['jpg', 'jpeg', 'png'].includes(extension)) {
+                console.log('Mostrando como imagen');
                 return `<img src="${archivoUrl}" alt="${plano.archivo_nombre}">`;
             } else {
+                console.log('Mostrando vista previa no disponible');
                 return `
                     <div class="no-preview">
                         <i class="fas fa-file"></i>
                         <h4>Vista previa no disponible</h4>
                         <p>Archivo: ${plano.archivo_nombre}</p>
-                        <p>Tipo: ${extension.toUpperCase()}</p>
+                        <p>Formato: ${extension.toUpperCase()}</p>
                         <p>Tamaño: ${(plano.archivo_tamaño / 1024).toFixed(1)} KB</p>
                         <a href="${archivoUrl}" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">
                             <i class="fas fa-download"></i> Descargar archivo

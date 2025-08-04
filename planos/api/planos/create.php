@@ -116,60 +116,38 @@ try {
         http_response_code(500);
         echo json_encode(['message' => 'Error de conexión a la base de datos']);
         exit;
-    }
+    } 
     
-    // Primero crear un proyecto para este plano
+    // Preparar datos para insertar directamente en planos
     $cliente = $_POST['cliente'];
     $descripcion = $_POST['descripcion'] ?? '';
-    $nombre_proyecto = $cliente . ' - ' . pathinfo($archivo['name'], PATHINFO_FILENAME);
-    
-    // Insertar proyecto
-    $proyecto_query = "INSERT INTO proyectos (usuario_id, nombre, descripcion, cliente) VALUES (:usuario_id, :nombre, :descripcion, :cliente)";
-    $proyecto_stmt = $db->prepare($proyecto_query);
-    $proyecto_stmt->bindParam(":usuario_id", $usuario_id);
-    $proyecto_stmt->bindParam(":nombre", $nombre_proyecto);
-    $proyecto_stmt->bindParam(":descripcion", $descripcion);
-    $proyecto_stmt->bindParam(":cliente", $cliente);
-    
-    if (!$proyecto_stmt->execute()) {
-        if (file_exists($file_path)) {
-            unlink($file_path);
-        }
-        http_response_code(500);
-        echo json_encode(['message' => 'Error al crear el proyecto']);
-        exit;
-    }
-    
-    $proyecto_id = $db->lastInsertId();
-    
-    // Ahora insertar el plano usando la estructura actual de tu BD
     $nombre_plano = pathinfo($archivo['name'], PATHINFO_FILENAME);
     $archivo_url = 'uploads/' . $unique_filename;
-    $software = $file_extension; // Usar la extensión como software
+    $formato = $file_extension; // Usar la extensión como formato
     
     // Generar datos del QR
     $base_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'];
     $qr_code = $base_url . '/planos/ver-plano-simple.html?id=';
     
     // Crear metadata JSON con información adicional
-    $metadata = json_encode([
-        'cliente' => $cliente,
+    $metadata_json = json_encode([
         'archivo_nombre' => $archivo['name'],
-        'archivo_tamaño' => $archivo['size'],
-        'descripcion' => $descripcion
+        'archivo_tamaño' => $archivo['size']
     ]);
     
-    // Insertar plano usando tu estructura actual
-    $plano_query = "INSERT INTO planos (proyecto_id, nombre, archivo_url, software, qr_code, metadata) 
-                    VALUES (:proyecto_id, :nombre, :archivo_url, :software, :qr_code, :metadata)";
+    // Insertar plano directamente con la nueva estructura
+    $plano_query = "INSERT INTO planos (usuario_id, nombre, cliente, descripcion, archivo_url, formato, qr_code, metadata)
+                    VALUES (:usuario_id, :nombre, :cliente, :descripcion, :archivo_url, :formato, :qr_code, :metadata)";
     
     $plano_stmt = $db->prepare($plano_query);
-    $plano_stmt->bindParam(":proyecto_id", $proyecto_id);
+    $plano_stmt->bindParam(":usuario_id", $usuario_id);
     $plano_stmt->bindParam(":nombre", $nombre_plano);
+    $plano_stmt->bindParam(":cliente", $cliente);
+    $plano_stmt->bindParam(":descripcion", $descripcion);
     $plano_stmt->bindParam(":archivo_url", $archivo_url);
-    $plano_stmt->bindParam(":software", $software);
+    $plano_stmt->bindParam(":formato", $formato);
     $plano_stmt->bindParam(":qr_code", $qr_code);
-    $plano_stmt->bindParam(":metadata", $metadata);
+    $plano_stmt->bindParam(":metadata", $metadata_json);
     
     if ($plano_stmt->execute()) {
         $plano_id = $db->lastInsertId();
@@ -186,20 +164,13 @@ try {
         echo json_encode([
             'message' => 'Plano creado exitosamente',
             'id' => $plano_id,
-            'proyecto_id' => $proyecto_id,
             'qr_code' => $qr_code_final
         ]);
     } else {
-        // Eliminar archivo y proyecto si falla la creación del plano
+        // Eliminar archivo si falla la creación del plano
         if (file_exists($file_path)) {
             unlink($file_path);
         }
-        
-        // Eliminar proyecto creado
-        $delete_proyecto = "DELETE FROM proyectos WHERE id = :id";
-        $delete_stmt = $db->prepare($delete_proyecto);
-        $delete_stmt->bindParam(":id", $proyecto_id);
-        $delete_stmt->execute();
         
         $error_info = $plano_stmt->errorInfo();
         http_response_code(500);

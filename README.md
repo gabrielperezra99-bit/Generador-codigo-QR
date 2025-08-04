@@ -12,16 +12,11 @@
 • Visualizador : Sistema para ver planos directamente en el navegador con contador de visitas
 
 ## Flujo de Trabajo:
-1. 1.
-   Login → El usuario se autentica en el sistema
-2. 2.
-   Subir Plano → El usuario carga un archivo desde generar-simple.html
-3. 3.
-   Generar QR → El sistema crea un código QR único con metadatos del plano
-4. 4.
-   Gestionar → Los planos se almacenan y pueden visualizarse desde mis-planos.html
-5. 5.
-   Compartir → Los códigos QR permiten acceso rápido a los planos via ver-plano-simple.html
+1. Login → El usuario se autentica en el sistema
+2. Subir Plano → El usuario carga un archivo desde generar-simple.html
+3. Generar QR → El sistema crea un código QR único con metadatos del plano
+4. Gestionar → Los planos se almacenan y pueden visualizarse desde mis-planos.html
+5. Compartir → Los códigos QR permiten acceso rápido a los planos via ver-plano-simple.html
 ## Tecnologías Utilizadas:
 • Backend : PHP 8+, MySQL, API RESTful, JWT para autenticación
 

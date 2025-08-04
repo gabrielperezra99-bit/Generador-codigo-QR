@@ -30,4 +30,4 @@
 
 • QR : Generación de códigos QR integrada con descarga de stickers
 
-• Base de Datos : MySQL con tablas relacionales (usuarios, proyectos, planos)
+• Base de Datos : MySQL con tablas relacionales (usuarios, planos)

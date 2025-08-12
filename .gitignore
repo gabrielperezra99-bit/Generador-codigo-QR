@@ -1,0 +1,19 @@
+# Configuración sensible
+api/config/config.php
+
+# Archivos subidos
+uploads/*.dwg
+uploads/*.jpg
+uploads/*.jpeg
+uploads/*.png
+!uploads/.htaccess
+
+# Dependencias
+vendor/
+node_modules/
+
+# Temporales
+*.tmp
+*.log
+.DS_Store
+Thumbs.db

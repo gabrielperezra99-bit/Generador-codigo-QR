@@ -30,10 +30,11 @@ try {
     $db = $database->getConnection();
     
     // Obtener planos del usuario directamente de la tabla planos
-    $query = "SELECT id, nombre, cliente, descripcion, archivo_url, formato, qr_code, metadata, version, fecha_subida
+    $query = "SELECT id, nombre, cliente, descripcion, archivo_url, formato, qr_code, metadata, version, fecha_subida,
+                     COALESCE(favorito, 0) as favorito, fecha_favorito, estado, empresa, etiquetas
               FROM planos 
               WHERE usuario_id = :usuario_id 
-              ORDER BY fecha_subida DESC";
+              ORDER BY COALESCE(favorito, 0) DESC, fecha_subida DESC";
     
     $stmt = $db->prepare($query);
     $stmt->bindParam(":usuario_id", $usuario_id);
@@ -55,10 +56,15 @@ try {
             'fecha_creacion' => $row['fecha_subida'],
             'qr_code' => $row['qr_code'],
             'formato' => $row['formato'],
-            'visitas' => intval($row['version'] ?? 0)
+            'visitas' => intval($row['version'] ?? 0),
+            'favorito' => (bool)$row['favorito'],
+            'fecha_favorito' => $row['fecha_favorito'],
+            'estado' => $row['estado'],
+            'empresa' => $row['empresa'],
+            'etiquetas' => $row['etiquetas']
         ];
         
-        $planos[] = $plano; // Corregido: era $plano_item, ahora es $plano
+        $planos[] = $plano;
     }
     
     echo json_encode($planos);

@@ -142,6 +142,20 @@ class API {
 
         return await this.request(`/planos/search.php?${params.toString()}`);
     }
+
+    async toggleFavorito(planoId) {
+        return await this.request('/planos/toggle_favorito.php', {
+            method: 'POST',
+            body: JSON.stringify({ plano_id: planoId })
+        });
+    }
+
+    async updatePlano(planoData) {
+        return await this.request('/planos/update.php', {
+            method: 'PUT',
+            body: JSON.stringify(planoData)
+        });
+    }
 }
 
 // Instancia global de la API

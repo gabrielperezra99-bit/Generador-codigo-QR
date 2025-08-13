@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Planos</title>    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Mis Planos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --primary: #2563eb;
@@ -174,50 +175,6 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .storage-info {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 20px;
-            border-radius: var(--radius);
-            margin: 20px 0;
-            font-size: 0.9rem;
-        }
-
-        .storage-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .storage-header i {
-            color: var(--primary);
-            margin-right: 8px;
-        }
-
-        .storage-bar {
-            background: var(--secondary);
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 12px 0;
-        }
-
-        .storage-used {
-            background: var(--primary);
-            height: 100%;
-            transition: width 0.3s ease;
-            border-radius: 4px;
-        }
-
-        .storage-warning .storage-used {
-            background: var(--warning);
-        }
-
-        .storage-danger .storage-used {
-            background: var(--danger);
-        }
-
         .btn {
             background: var(--primary);
             color: white;
@@ -274,7 +231,7 @@
 
         .planos-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 20px;
             margin-top: 24px;
         }
@@ -282,21 +239,144 @@
         .plano-card {
             background: var(--surface);
             border-radius: var(--radius);
-            padding: 20px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             transition: all 0.3s ease;
             cursor: pointer;
-            min-height: 220px;
             display: flex;
             flex-direction: column;
             position: relative;
+            overflow: hidden;
         }
 
         .plano-card:hover {
             transform: translateY(-4px);
             box-shadow: var(--shadow-lg);
-            background: var(--surface-hover);
+        }
+
+        .plano-card.favorito {
+            border: 2px solid #fbbf24;
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.2);
+        }
+
+        .plano-preview {
+            width: 100%;
+            height: 200px;
+            background: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plano-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .plano-preview .no-preview {
+            color: var(--text-light);
+            font-size: 3rem;
+        }
+
+        .file-preview {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: var(--secondary);
+            color: var(--text-primary);
+            padding: 20px;
+        }
+
+        .file-preview p {
+            margin: 0;
+            word-break: break-word;
+        }
+
+        .pdf-preview {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        }
+
+        .dwg-preview {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        }
+
+        .dxf-preview {
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+        }
+
+        .unknown-preview {
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+        }
+
+        .favorito-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #fbbf24;
+            color: white;
+            padding: 4px 8px;
+            border-radius: var(--radius-small);
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .estado-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 4px 8px;
+            border-radius: var(--radius-small);
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .estado-en-progreso {
+            background: var(--warning);
+        }
+
+        .estado-completado {
+            background: var(--success);
+        }
+
+        .estado-revision {
+            background: var(--primary);
+        }
+
+        .empresa-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            padding: 4px 8px;
+            border-radius: var(--radius-small);
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .empresa-badge.fremaq {
+            background: #ff8c00; /* Naranjo */
+        }
+
+        .empresa-badge.solman {
+            background: #20b2aa; /* Verde agua */
+        }
+
+        .plano-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .plano-header {
@@ -360,6 +440,76 @@
             font-weight: 500;
         }
 
+        .etiquetas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .etiqueta {
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .etiqueta.design {
+            background: #8b5cf6;
+        }
+
+        .etiqueta.plumbing {
+            background: #06b6d4;
+        }
+
+        .etiqueta.electrical {
+            background: #f59e0b;
+        }
+
+        .subtareas-preview {
+            background: var(--secondary);
+            padding: 8px;
+            border-radius: var(--radius-small);
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+        }
+
+        .subtarea-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+
+        .subtarea-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .subtarea-checkbox {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            border: 1px solid var(--border);
+            background: white;
+            position: relative;
+        }
+
+        .subtarea-checkbox.completada {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .subtarea-checkbox.completada::after {
+            content: '✓';
+            color: white;
+            font-size: 8px;
+            position: absolute;
+            top: -1px;
+            left: 1px;
+        }
+
         .plano-actions {
             display: flex;
             gap: 8px;
@@ -367,22 +517,6 @@
         }
 
         .action-btn {
-            flex: 1;
-            padding: 8px 12px;
-            border: none;
-            border-radius: var(--radius-small);
-            font-size: 0.8rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            text-decoration: none;
-        }
-
-        .action-btn.view {
             flex: 1;
             padding: 8px 12px;
             border: none;
@@ -407,6 +541,15 @@
             background: var(--primary-dark);
         }
 
+        .action-btn.edit {
+            background: var(--warning);
+            color: white;
+        }
+
+        .action-btn.edit:hover {
+            background: #b45309;
+        }
+
         .action-btn.qr {
             background: var(--accent);
             color: white;
@@ -414,6 +557,26 @@
 
         .action-btn.qr:hover {
             background: #0284c7;
+        }
+
+        .action-btn.favorite {
+            background: #fbbf24;
+            color: white;
+        }
+
+        .action-btn.favorite:hover {
+            background: #f59e0b;
+        }
+
+        .action-btn.favorite.active {
+            background: #d97706;
+            border: 2px solid #fbbf24;
+            color: #fbbf24;
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+        }
+        
+        .action-btn.favorite.active i {
+            color: #fbbf24;
         }
 
         .action-btn.delete {
@@ -425,27 +588,8 @@
             background: #b91c1c;
         }
 
-        .no-planos {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-light);
-            background: var(--surface);
-            border-radius: var(--radius);
-            border: 2px dashed var(--border);
-        }
-
-        .no-planos i {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            color: var(--text-light);
-        }
-
-        .no-planos h2 {
-            margin-bottom: 12px;
-            color: var(--text-secondary);
-        }
-
-        .qr-modal {
+        /* Modales */
+        .modal {
             display: none;
             position: fixed;
             top: 0;
@@ -457,90 +601,171 @@
             backdrop-filter: blur(4px);
         }
 
-        .qr-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
             background: var(--surface);
             padding: 32px;
             border-radius: var(--radius);
             box-shadow: var(--shadow-xl);
-            max-width: 500px;
+            max-width: 600px;
             width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            margin: 0;
+            position: relative;
+            transform: none;
         }
 
-        .qr-content h2 {
+        .modal-content h2 {
             text-align: center;
             margin-bottom: 24px;
             color: var(--text-primary);
         }
 
-        .qr-content h2 i {
+        .modal-content h2 i {
             color: var(--primary);
             margin-right: 8px;
-        }
-
-        .qr-sticker {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .qr-code-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 16px;
-        }
-
-        .qr-placeholder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        .qr-placeholder i {
-            font-size: 2rem;
-        }
-
-        .qr-info {
-            background: var(--secondary);
-            padding: 16px;
-            border-radius: var(--radius-small);
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        .url-box {
-            background: var(--secondary);
-            padding: 12px;
-            border-radius: var(--radius-small);
-            font-family: monospace;
-            font-size: 0.8rem;
-            word-break: break-all;
-            margin-bottom: 20px;
-            border: 1px solid var(--border);
         }
 
         .modal-actions {
             display: flex;
             gap: 12px;
             justify-content: center;
+            margin-top: 24px;
+            flex-wrap: wrap;
         }
 
-        .nav-actions {
-            margin-top: 24px;
+        /* Indicador de subtareas activas */
+        .subtareas-indicator {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
             display: flex;
-            gap: 12px;
+            align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
+            font-weight: bold;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .action-btn.subtareas {
+            position: relative;
+        }
+
+        /* Estilos para subtareas */
+        .subtarea-item {
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-small);
+            margin-bottom: 8px;
+            background: var(--surface);
+            transition: all 0.2s ease;
+        }
+
+        .subtarea-item:hover {
+            background: var(--surface-hover);
+            border-color: var(--primary);
+        }
+
+        .subtarea-item.completada {
+            background: rgba(5, 150, 105, 0.1);
+            border-color: var(--success);
+        }
+
+        .subtarea-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .subtarea-descripcion {
+            flex: 1;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .subtarea-meta {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        /* Mejorar el formulario de nueva subtarea */
+        .nueva-subtarea-form {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-top: 20px;
+            border: 1px solid var(--border-light);
+        }
+
+        .nueva-subtarea-form .form-group {
+            margin-bottom: 16px;
+        }
+
+        .nueva-subtarea-form .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .nueva-subtarea-section {
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--secondary);
+            border-radius: var(--radius-small);
+            border: 1px solid var(--border);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .input-group input {
+            flex: 1;
+        }
+
+        .input-group .btn {
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .no-planos {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+
+        .no-planos i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--text-light);
+        }
+
+        .no-planos h2 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
         }
 
         @keyframes fadeInUp {
@@ -569,9 +794,17 @@
                 grid-template-columns: 1fr;
             }
 
-            .nav-actions {
-                flex-direction: column;
-                align-items: center;
+            .plano-actions {
+                flex-wrap: wrap;
+            }
+
+            .action-btn {
+                min-width: 80px;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
             }
         }
 
@@ -588,8 +821,8 @@
                 padding: 16px;
             }
 
-            .qr-content {
-                padding: 20px;
+            .modal-content {
+                padding: 16px;
             }
         }
     </style>
@@ -602,9 +835,10 @@
             
             <div class="user-header">
                 <div class="user-info">
-                    Sesión iniciada como: <span id="userEmail" class="user-email"></span>
+                    <div class="welcome-text">Sesión iniciada como:</div>
+                    <div id="userEmail" class="user-email"></div>
                 </div>
-                <button class="btn btn-small" onclick="logout()">
+                <button class="btn btn-small logout-btn" onclick="logout()">
                     <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
                 </button>
             </div>
@@ -621,6 +855,25 @@
                     <input type="text" id="filterClient" placeholder="Filtrar por cliente...">
                 </div>
                 <div class="form-group">
+                    <label for="filterEstado">Estado:</label>
+                    <select id="filterEstado">
+                        <option value="">Todos los estados</option>
+                        <option value="en_progreso">En Progreso</option>
+                        <option value="revision">Revisión Final</option>
+                        <option value="completado">Completado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filterEtiqueta">Etiqueta:</label>
+                    <select id="filterEtiqueta">
+                        <option value="">Todas las etiquetas</option>
+                        <option value="design">Diseño</option>
+                        <option value="plumbing">Plomería</option>
+                        <option value="electrical">Eléctrico</option>
+                        <option value="structural">Estructural</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="dateFrom">Desde:</label>
                     <input type="date" id="dateFrom">
                 </div>
@@ -629,12 +882,15 @@
                     <input type="date" id="dateTo">
                 </div>
             </div>
-            <div style="display: flex; gap: 12px;">
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                 <button class="btn btn-small" onclick="applyFilters()">
                     <i class="fas fa-search"></i> Buscar
                 </button>
                 <button class="btn btn-small btn-secondary" onclick="clearFilters()">
                     <i class="fas fa-times"></i> Limpiar
+                </button>
+                <button class="btn btn-small" onclick="toggleFavoritesOnly()">
+                    <i class="fas fa-star"></i> Solo Favoritos
                 </button>
             </div>
         </div>
@@ -647,7 +903,7 @@
             <p>Sube tu primer plano para comenzar a organizar tu colección</p>
         </div>
 
-        <div class="nav-actions" style="margin-top: 24px; display: flex; gap: 12px; justify-content: center;">
+        <div class="nav-actions" style="margin-top: 24px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
             <a href="index.html" class="btn btn-secondary">
                 <i class="fas fa-home"></i> Inicio
             </a>
@@ -658,8 +914,8 @@
     </div>
 
     <!-- Modal para mostrar QR -->
-    <div id="qrModal" class="qr-modal">
-        <div class="qr-content">
+    <div id="qrModal" class="modal">
+        <div class="modal-content">
             <h2><i class="fas fa-qrcode"></i> Código QR del Plano</h2>
             <div class="qr-sticker">
                 <div id="qrCodeContainer" class="qr-code-container">
@@ -688,7 +944,97 @@
                 <button class="btn btn-success" onclick="descargarQRSticker()">
                     <i class="fas fa-download"></i> Descargar Sticker
                 </button>
-                <button class="btn btn-danger" onclick="cerrarModal()">
+                <button class="btn btn-danger" onclick="cerrarModal('qrModal')">
+                    <i class="fas fa-times"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para editar plano -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-edit"></i> Editar Plano</h2>
+            <form id="editForm">
+                <div class="form-group">
+                    <label for="editNombre">Nombre del Plano:</label>
+                    <input type="text" id="editNombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCliente">Cliente:</label>
+                    <input type="text" id="editCliente">
+                </div>
+                <div class="form-group">
+                    <label for="editDescripcion">Descripción:</label>
+                    <textarea id="editDescripcion" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editEstado">Estado:</label>
+                    <select id="editEstado">
+                        <option value="en_progreso">En Progreso</option>
+                        <option value="revision">Revisión Final</option>
+                        <option value="completado">Completado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editEmpresa">Empresa:</label>
+                    <select id="editEmpresa">
+                        <option value="FREMAQ">FREMAQ</option>
+                        <option value="SOLMAN">SOLMAN</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editEtiquetas">Etiquetas:</label>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+                        <label style="display: flex; align-items: center; gap: 4px;">
+                            <input type="checkbox" value="design" class="etiqueta-checkbox"> Diseño
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 4px;">
+                            <input type="checkbox" value="plumbing" class="etiqueta-checkbox"> Plomería
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 4px;">
+                            <input type="checkbox" value="electrical" class="etiqueta-checkbox"> Eléctrico
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 4px;">
+                            <input type="checkbox" value="structural" class="etiqueta-checkbox"> Estructural
+                        </label>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-actions">
+                <button class="btn btn-success" onclick="guardarEdicion()">
+                    <i class="fas fa-save"></i> Guardar Cambios
+                </button>
+                <button class="btn btn-secondary" onclick="cerrarModal('editModal')">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para subtareas -->
+    <div id="subtareasModal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-tasks"></i> Subtareas Internas</h2>
+            <div id="subtareasContainer">
+                <!-- Las subtareas se cargarán aquí -->
+            </div>
+            
+            <!-- Sección para agregar nueva subtarea -->
+            <div class="nueva-subtarea-section">
+                <div class="form-group">
+                    <label for="nuevaSubtarea">Nueva Subtarea:</label>
+                    <div class="input-group">
+                        <input type="text" id="nuevaSubtarea" placeholder="Descripción de la subtarea..." onkeypress="if(event.key==='Enter') agregarSubtarea()">
+                        <button class="btn btn-primary" onclick="agregarSubtarea()">
+                            <i class="fas fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="cerrarModal('subtareasModal')">
                     <i class="fas fa-times"></i> Cerrar
                 </button>
             </div>
@@ -699,10 +1045,73 @@
     <script src="js/auth.js"></script>
     <script src="js/api.js"></script>
     <script>
+        function getPreviewContent(plano) {
+            if (!plano.archivo_url) {
+                return `<div class="no-preview"><i class="fas fa-image"></i></div>`;
+            }
+            
+            // Obtener extensión del archivo
+            const extension = plano.formato ? plano.formato.toLowerCase() : 
+                             plano.archivo_url.split('.').pop().toLowerCase();
+            
+            switch(extension) {
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                    return `<img src="${plano.archivo_url}" alt="${plano.nombre}" 
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="no-preview" style="display: none;"><i class="fas fa-image"></i></div>`;
+                
+                case 'pdf':
+                    return `<div class="file-preview pdf-preview">
+                                <i class="fas fa-file-pdf" style="font-size: 4rem; color: #dc2626;"></i>
+                                <p style="margin-top: 10px; font-weight: 600;">PDF</p>
+                                <p style="font-size: 0.8rem; color: var(--text-secondary);">${plano.nombre}</p>
+                            </div>`;
+                
+                case 'dwg':
+                    // Si hay preview_url, mostrar la imagen de previsualización
+                    if (plano.preview_url) {
+                        return `<img src="${plano.preview_url}" alt="${plano.nombre}" 
+                                     style="width: 100%; height: 100%; object-fit: cover;" 
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="file-preview dwg-preview" style="display: none;">
+                                    <i class="fas fa-drafting-compass" style="font-size: 4rem; color: #2563eb;"></i>
+                                    <p style="margin-top: 10px; font-weight: 600;">DWG</p>
+                                    <p style="font-size: 0.8rem; color: var(--text-secondary);">${plano.nombre}</p>
+                                </div>`;
+                    } else {
+                        return `<div class="file-preview dwg-preview">
+                                    <i class="fas fa-drafting-compass" style="font-size: 4rem; color: #2563eb;"></i>
+                                    <p style="margin-top: 10px; font-weight: 600;">DWG</p>
+                                    <p style="font-size: 0.8rem; color: var(--text-secondary);">${plano.nombre}</p>
+                                </div>`;
+                    }
+                
+                case 'dxf':
+                    return `<div class="file-preview dxf-preview">
+                                <i class="fas fa-vector-square" style="font-size: 4rem; color: #7c3aed;"></i>
+                                <p style="margin-top: 10px; font-weight: 600;">DXF</p>
+                                <p style="font-size: 0.8rem; color: var(--text-secondary);">${plano.nombre}</p>
+                            </div>`;
+                
+                default:
+                    return `<div class="file-preview unknown-preview">
+                                <i class="fas fa-file" style="font-size: 4rem; color: var(--text-secondary);"></i>
+                                <p style="margin-top: 10px; font-weight: 600;">${extension.toUpperCase()}</p>
+                                <p style="font-size: 0.8rem; color: var(--text-secondary);">${plano.nombre}</p>
+                            </div>`;
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
         let currentPlanos = [];
-        let currentProjects = [];
         let planoActualQR = null;
+        let planoActualEdit = null;
+        let planoActualSubtareas = null;
         let urlActual = '';
+        let favoritesOnly = false;
 
         // Verificar autenticación al cargar
         document.addEventListener('DOMContentLoaded', function() {
@@ -724,19 +1133,42 @@
             // Filtros en tiempo real
             document.getElementById('searchTerm').addEventListener('input', applyFilters);
             document.getElementById('filterClient').addEventListener('input', applyFilters);
+            document.getElementById('filterEstado').addEventListener('change', applyFilters);
+            document.getElementById('filterEtiqueta').addEventListener('change', applyFilters);
             document.getElementById('dateFrom').addEventListener('change', applyFilters);
             document.getElementById('dateTo').addEventListener('change', applyFilters);
+
+            // Cerrar modales al hacer clic fuera
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.remove('show');
+                    }
+                });
+            });
         }
 
         async function loadData() {
             try {
-                // Cargar planos
                 const planosResponse = await api.getPlanos();
-                // La respuesta es directamente el array de planos
                 currentPlanos = Array.isArray(planosResponse) ? planosResponse : [];
+                
+                // Ordenar favoritos primero, luego por fecha
+                currentPlanos.sort((a, b) => {
+                    if (a.favorito && !b.favorito) return -1;
+                    if (!a.favorito && b.favorito) return 1;
+                    if (a.favorito && b.favorito) {
+                        return new Date(a.fecha_favorito) - new Date(b.fecha_favorito);
+                    }
+                    return new Date(b.fecha_creacion) - new Date(a.fecha_creacion);
+                });
+
                 displayPlanos(currentPlanos);
                 
-                console.log('Planos cargados:', currentPlanos); // Para debug
+                // Cargar contadores de subtareas para todos los planos
+                await cargarContadoresSubtareas();
+                
+                console.log('Planos cargados:', currentPlanos);
             } catch (error) {
                 console.error('Error cargando datos:', error);
                 showNotification('Error al cargar los datos', 'error');
@@ -745,11 +1177,17 @@
             }
         }
 
+        // Nueva función para cargar contadores de todos los planos
+        async function cargarContadoresSubtareas() {
+            for (const plano of currentPlanos) {
+                await cargarContadorSubtareas(plano.id);
+            }
+        }
+
         function displayPlanos(planos) {
             const container = document.getElementById('planosContainer');
             const noPlanos = document.getElementById('noPlanos');
 
-            // Actualizar contador de planos
             document.getElementById('totalPlanos').textContent = planos.length;
 
             if (planos.length === 0) {
@@ -761,71 +1199,137 @@
             container.style.display = 'grid';
             noPlanos.style.display = 'none';
 
-            container.innerHTML = planos.map(plano => `
-                <div class="plano-card">
-                    <div class="plano-header">
-                        <h3 title="${plano.nombre}">${plano.nombre}</h3>
-                        <div class="plano-date">${formatDate(plano.fecha_creacion)}</div>
-                    </div>
-                    
-                    <div class="plano-info">
-                        ${plano.cliente ? `
-                        <div class="info-row">
-                            <i class="fas fa-user"></i>
-                            <span class="info-label">Cliente:</span>
-                            <span class="info-value">${plano.cliente}</span>
+            container.innerHTML = planos.map(plano => {
+                const etiquetas = plano.etiquetas ? JSON.parse(plano.etiquetas) : [];
+                const subtareas = plano.subtareas || [];
+                const subtareasCompletadas = subtareas.filter(s => s.completada).length;
+                
+                return `
+                    <div class="plano-card ${plano.favorito ? 'favorito' : ''}">
+                        <div class="plano-preview">
+                            ${getPreviewContent(plano)}
+                            
+                            ${plano.favorito ? '<div class="favorito-badge"><i class="fas fa-star"></i> Favorito</div>' : ''}
+                            
+                            ${plano.empresa ? `<div class="empresa-badge ${plano.empresa.toLowerCase()}">${plano.empresa}</div>` : ''}
+                            
+                            ${plano.estado ? `<div class="estado-badge estado-${plano.estado}">
+                                ${plano.estado === 'planificacion' ? 'Planificación' :
+                                  plano.estado === 'en_progreso' ? 'En Progreso' : 
+                                  plano.estado === 'revision' ? 'Revisión' : 
+                                  plano.estado === 'completado' ? 'Completado' : 
+                                  plano.estado === 'pausado' ? 'Pausado' : plano.estado}
+                            </div>` : ''}
                         </div>
-                        ` : ''}
                         
-                        <div class="info-row">
-                            <i class="fas fa-eye"></i>
-                            <span class="info-label">Visitas:</span>
-                            <span class="info-value">${plano.visitas || 0}</span>
+                        <div class="plano-content">
+                            <div class="plano-header">
+                                <h3 title="${plano.nombre}">${plano.nombre}</h3>
+                                <div class="plano-date">${formatDate(plano.fecha_creacion)}</div>
+                            </div>
+                            
+                            ${etiquetas.length > 0 ? `
+                            <div class="etiquetas">
+                                ${etiquetas.map(etiqueta => `<span class="etiqueta ${etiqueta}">${getEtiquetaLabel(etiqueta)}</span>`).join('')}
+                            </div>
+                            ` : ''}
+                            
+                            <div class="plano-info">
+                                ${plano.cliente ? `
+                                <div class="info-row">
+                                    <i class="fas fa-user"></i>
+                                    <span class="info-label">Cliente:</span>
+                                    <span class="info-value">${plano.cliente}</span>
+                                </div>
+                                ` : ''}
+                                
+                                <div class="info-row">
+                                    <i class="fas fa-eye"></i>
+                                    <span class="info-label">Visitas:</span>
+                                    <span class="info-value">${plano.visitas || 0}</span>
+                                </div>
+                                
+                                ${plano.descripcion ? `
+                                <div class="info-row">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="info-label">Descripción:</span>
+                                    <span class="info-value">${plano.descripcion}</span>
+                                </div>
+                                ` : ''}
+                            </div>
+                            
+                            ${subtareas.length > 0 ? `
+                            <div class="subtareas-preview">
+                                <div style="font-weight: 500; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                                    <i class="fas fa-tasks"></i>
+                                    Subtareas (${subtareasCompletadas}/${subtareas.length})
+                                </div>
+                                ${subtareas.slice(0, 3).map(subtarea => `
+                                    <div class="subtarea-item">
+                                        <div class="subtarea-checkbox ${subtarea.completada ? 'completada' : ''}"></div>
+                                        <span style="font-size: 0.75rem;">${subtarea.descripcion}</span>
+                                    </div>
+                                `).join('')}
+                                ${subtareas.length > 3 ? `<div style="font-size: 0.7rem; color: var(--text-light); margin-top: 4px;">+${subtareas.length - 3} más...</div>` : ''}
+                            </div>
+                            ` : ''}
+                            
+                            <div class="plano-actions">
+                                <a href="ver-plano-simple.html?id=${plano.id}" class="action-btn view" title="Ver plano">
+                                    <i class="fas fa-eye"></i> Ver
+                                </a>
+                                <button class="action-btn edit" onclick="editarPlano(${plano.id})" title="Editar">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                                <button class="action-btn qr" onclick="mostrarQR(${plano.id})" title="Generar QR">
+                                    <i class="fas fa-qrcode"></i> QR
+                                </button>
+                                <button class="action-btn favorite ${plano.favorito ? 'active' : ''}" onclick="toggleFavorito(${plano.id})" title="${plano.favorito ? 'Quitar de favoritos' : 'Agregar a favoritos'}">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn subtareas" onclick="gestionarSubtareas(${plano.id})" title="Subtareas" style="background: #8b5cf6;">
+                                    <i class="fas fa-tasks"></i>
+                                    <span id="indicator-${plano.id}" class="subtareas-indicator" style="display: none;">0</span>
+                                </button>
+                                <button class="action-btn delete" onclick="eliminarPlano(${plano.id})" title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </div>
-                        
-                        ${plano.descripcion ? `
-                        <div class="info-row">
-                            <i class="fas fa-info-circle"></i>
-                            <span class="info-label">Descripción:</span>
-                            <span class="info-value">${plano.descripcion}</span>
-                        </div>
-                        ` : ''}
                     </div>
-                    
-                    <div class="plano-actions">
-                        <a href="ver-plano-simple.html?id=${plano.id}" class="action-btn view" title="Ver plano">
-                            <i class="fas fa-eye"></i> Ver
-                        </a>
-                        <button class="action-btn qr" onclick="mostrarQR(${plano.id})" title="Generar QR">
-                            <i class="fas fa-qrcode"></i> QR
-                        </button>
-                        <button class="action-btn delete" onclick="eliminarPlano(${plano.id})" title="Eliminar">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
+            
+            // Recargar contadores después de mostrar planos
+            cargarContadoresSubtareas();
         }
 
-        function populateProjectFilter() {
-            const select = document.getElementById('filterProject');
-            select.innerHTML = '<option value="">Todos los proyectos</option>';
-            
-            currentProjects.forEach(project => {
-                const option = document.createElement('option');
-                option.value = project.id;
-                option.textContent = project.nombre;
-                select.appendChild(option);
-            });
+        function getEtiquetaLabel(etiqueta) {
+            const labels = {
+                'Diseño': 'Diseño',
+                'Plomería': 'Plomería', 
+                'Eléctrico': 'Eléctrico',
+                'Estructural': 'Estructural',
+                'design': 'Diseño',
+                'plumbing': 'Plomería',
+                'electrical': 'Eléctrico',
+                'structural': 'Estructural'
+            };
+            return labels[etiqueta] || etiqueta;
         }
 
         function applyFilters() {
             const searchTerm = document.getElementById('searchTerm').value.toLowerCase();
             const filterClient = document.getElementById('filterClient').value.toLowerCase();
+            const filterEstado = document.getElementById('filterEstado').value;
+            const filterEtiqueta = document.getElementById('filterEtiqueta').value;
             const dateFrom = document.getElementById('dateFrom').value;
             const dateTo = document.getElementById('dateTo').value;
 
             let filteredPlanos = currentPlanos.filter(plano => {
+                // Filtro de favoritos
+                if (favoritesOnly && !plano.favorito) return false;
+
                 // Filtro de búsqueda general
                 const matchesSearch = !searchTerm || 
                     plano.nombre.toLowerCase().includes(searchTerm) ||
@@ -834,6 +1338,16 @@
                 // Filtro de cliente
                 const matchesClient = !filterClient || 
                     (plano.cliente && plano.cliente.toLowerCase().includes(filterClient));
+
+                // Filtro de estado
+                const matchesEstado = !filterEstado || plano.estado === filterEstado;
+
+                // Filtro de etiqueta
+                let matchesEtiqueta = true;
+                if (filterEtiqueta) {
+                    const etiquetas = plano.etiquetas ? JSON.parse(plano.etiquetas) : [];
+                    matchesEtiqueta = etiquetas.includes(filterEtiqueta);
+                }
 
                 // Filtro de fecha
                 let matchesDate = true;
@@ -845,12 +1359,12 @@
                     }
                     if (dateTo) {
                         const toDate = new Date(dateTo);
-                        toDate.setHours(23, 59, 59, 999); // Incluir todo el día
+                        toDate.setHours(23, 59, 59, 999);
                         matchesDate = matchesDate && planoDate <= toDate;
                     }
                 }
 
-                return matchesSearch && matchesClient && matchesDate;
+                return matchesSearch && matchesClient && matchesEstado && matchesEtiqueta && matchesDate;
             });
 
             displayPlanos(filteredPlanos);
@@ -859,9 +1373,279 @@
         function clearFilters() {
             document.getElementById('searchTerm').value = '';
             document.getElementById('filterClient').value = '';
+            document.getElementById('filterEstado').value = '';
+            document.getElementById('filterEtiqueta').value = '';
             document.getElementById('dateFrom').value = '';
             document.getElementById('dateTo').value = '';
+            favoritesOnly = false;
             displayPlanos(currentPlanos);
+        }
+
+        function toggleFavoritesOnly() {
+            favoritesOnly = !favoritesOnly;
+            const btn = event.target.closest('button');
+            if (favoritesOnly) {
+                btn.style.background = '#fbbf24';
+                btn.innerHTML = '<i class="fas fa-star"></i> Mostrando Favoritos';
+            } else {
+                btn.style.background = '';
+                btn.innerHTML = '<i class="fas fa-star"></i> Solo Favoritos';
+            }
+            applyFilters();
+        }
+
+        async function toggleFavorito(planoId) {
+            try {
+                const result = await api.toggleFavorito(planoId);
+                
+                if (result && result.success) {
+                    showNotification(result.favorito ? 'Agregado a favoritos' : 'Removido de favoritos', 'success');
+                    await loadData(); // Recargar datos para actualizar el orden
+                } else {
+                    showNotification(result?.message || 'Error al actualizar favorito', 'error');
+                    console.error('Error details:', result);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Error al actualizar favorito: ' + error.message, 'error');
+            }
+        }
+
+        async function editarPlano(planoId) {
+            try {
+                const plano = currentPlanos.find(p => p.id == planoId);
+                if (!plano) {
+                    showNotification('Plano no encontrado', 'error');
+                    return;
+                }
+
+                planoActualEdit = plano;
+
+                // Llenar el formulario
+                document.getElementById('editNombre').value = plano.nombre || '';
+                document.getElementById('editCliente').value = plano.cliente || '';
+                document.getElementById('editDescripcion').value = plano.descripcion || '';
+                document.getElementById('editEstado').value = plano.estado || 'en_progreso';
+
+                // Manejar etiquetas
+                const etiquetas = plano.etiquetas ? plano.etiquetas.split(',') : [];
+                document.querySelectorAll('.etiqueta-checkbox').forEach(checkbox => {
+                    checkbox.checked = etiquetas.includes(checkbox.value);
+                });
+
+                // Establecer empresa
+                document.getElementById('editEmpresa').value = plano.empresa || 'FREMAQ';
+
+                // Mostrar modal
+                document.getElementById('editModal').classList.add('show');
+            } catch (error) {
+                console.error('Error editando plano:', error);
+                showNotification('Error al cargar datos del plano', 'error');
+            }
+        }
+
+        function refreshAPIToken() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                api.token = token;
+                console.log('Token refrescado:', token);
+                return true;
+            }
+            return false;
+        }
+
+        async function guardarEdicion() {
+            if (!planoActualEdit) return;
+
+            // Intentar refrescar el token si no está presente
+            if (!api.token) {
+                if (!refreshAPIToken()) {
+                    showNotification('Sesión expirada. Por favor, inicia sesión nuevamente.', 'error');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                    return;
+                }
+            }
+
+            const etiquetasSeleccionadas = Array.from(document.querySelectorAll('.etiqueta-checkbox:checked'))
+                .map(checkbox => checkbox.value);
+
+            const datosActualizados = {
+                id: planoActualEdit.id,
+                nombre: document.getElementById('editNombre').value,
+                cliente: document.getElementById('editCliente').value,
+                descripcion: document.getElementById('editDescripcion').value,
+                estado: document.getElementById('editEstado').value,
+                empresa: document.getElementById('editEmpresa').value,
+                etiquetas: JSON.stringify(etiquetasSeleccionadas)
+            };
+
+            try {
+                const result = await api.updatePlano(datosActualizados);
+                
+                if (result && result.success) {
+                    showNotification('Plano actualizado correctamente', 'success');
+                    cerrarModal('editModal');
+                    await loadData();
+                } else {
+                    showNotification(result?.message || 'Error al actualizar el plano', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Error al actualizar el plano', 'error');
+            }
+        }
+
+        async function cargarContadorSubtareas(planoId) {
+            try {
+                const response = await api.request(`/subtareas/read.php?plano_id=${planoId}`);
+                if (response && Array.isArray(response)) {
+                    const subtareasActivas = response.filter(subtarea => subtarea.estado !== 'completada');
+                    const indicator = document.getElementById(`indicator-${planoId}`);
+                    if (indicator) {
+                        if (subtareasActivas.length > 0) {
+                            indicator.textContent = subtareasActivas.length;
+                            indicator.style.display = 'flex';
+                        } else {
+                            indicator.style.display = 'none';
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error cargando contador de subtareas:', error);
+            }
+        }
+
+        async function gestionarSubtareas(planoId) {
+            const plano = currentPlanos.find(p => p.id == planoId);
+            if (!plano) {
+                showNotification('Plano no encontrado', 'error');
+                return;
+            }
+
+            planoActualSubtareas = planoId;
+            await cargarSubtareas();
+            document.getElementById('subtareasModal').classList.add('show');
+        }
+
+        async function cargarSubtareas() {
+            if (!planoActualSubtareas) return;
+
+            try {
+                const response = await api.request(`/subtareas/read.php?plano_id=${planoActualSubtareas}`);
+                const container = document.getElementById('subtareasContainer');
+                
+                if (!response || !Array.isArray(response) || response.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; color: var(--text-light); padding: 20px;"><i class="fas fa-tasks"></i><br>No hay subtareas creadas</div>';
+                    return;
+                }
+
+                container.innerHTML = response.map(subtarea => {
+                    const fechaCreacion = new Date(subtarea.fecha_creacion);
+                    const fechaFormateada = fechaCreacion.toLocaleDateString('es-ES', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+
+                    const completada = subtarea.estado === 'completada';
+                    const claseCompletada = completada ? 'completada' : '';
+
+                    return `
+                        <div class="subtarea-item ${claseCompletada}">
+                            <div class="subtarea-header">
+                                <div class="subtarea-descripcion">${subtarea.descripcion}</div>
+                                <button class="btn btn-small btn-danger" onclick="eliminarSubtarea(${subtarea.id})" style="padding: 4px 8px;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            <div class="subtarea-meta">
+                                Creada: ${fechaFormateada}
+                                ${completada ? ' • <span style="color: var(--success);">Completada</span>' : ' • <span style="color: var(--warning);">Pendiente</span>'}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Actualizar contador en el indicador
+                cargarContadorSubtareas(planoActualSubtareas);
+
+            } catch (error) {
+                console.error('Error cargando subtareas:', error);
+                document.getElementById('subtareasContainer').innerHTML = '<div style="text-align: center; color: var(--danger); padding: 20px;"><i class="fas fa-exclamation-triangle"></i><br>Error cargando subtareas</div>';
+            }
+        }
+
+        async function agregarSubtarea() {
+            const descripcion = document.getElementById('nuevaSubtarea').value.trim();
+            
+            if (!descripcion) {
+                showNotification('Por favor ingresa una descripción para la subtarea', 'error');
+                return;
+            }
+
+            if (!planoActualSubtareas) {
+                showNotification('Error: No se ha seleccionado un plano', 'error');
+                return;
+            }
+
+            try {
+                const response = await api.request('/subtareas/create.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    body: JSON.stringify({
+                        plano_id: planoActualSubtareas,
+                        titulo: descripcion,
+                        descripcion: descripcion
+                    })
+                });
+
+                if (response.success) {
+                    document.getElementById('nuevaSubtarea').value = '';
+                    await cargarSubtareas();
+                    // Actualizar contador inmediatamente
+                    await cargarContadorSubtareas(planoActualSubtareas);
+                    showNotification('Subtarea agregada correctamente', 'success');
+                } else {
+                    showNotification('Error al agregar subtarea: ' + (response.message || 'Error desconocido'), 'error');
+                }
+            } catch (error) {
+                console.error('Error agregando subtarea:', error);
+                showNotification('Error al agregar subtarea', 'error');
+            }
+        }
+
+        async function eliminarSubtarea(subtareaId) {
+            if (!confirm('¿Estás seguro de que quieres eliminar esta subtarea?')) {
+                return;
+            }
+
+            try {
+                const response = await api.request('/subtareas/delete.php', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    body: JSON.stringify({ id: subtareaId })
+                });
+
+                if (response.success) {
+                    await cargarSubtareas();
+                    // Actualizar contador inmediatamente
+                    await cargarContadorSubtareas(planoActualSubtareas);
+                    showNotification('Subtarea eliminada correctamente', 'success');
+                } else {
+                    showNotification('Error al eliminar subtarea: ' + (response.message || 'Error desconocido'), 'error');
+                }
+            } catch (error) {
+                console.error('Error eliminando subtarea:', error);
+                showNotification('Error al eliminar subtarea', 'error');
+            }
         }
 
         async function mostrarQR(planoId) {
@@ -873,7 +1657,7 @@
                 }
 
                 planoActualQR = plano;
-                urlActual = `${window.location.origin}/ver-plano-simple.html?id=${plano.id}`;
+                urlActual = `${window.location.origin}${window.location.pathname.replace('mis-planos.html', 'ver-plano-simple.html')}?id=${plano.id}`;
 
                 // Actualizar información del modal
                 document.getElementById('qrPlanoNombre').textContent = plano.nombre;
@@ -887,7 +1671,7 @@
                 generarQR(urlActual);
 
                 // Mostrar modal
-                document.getElementById('qrModal').style.display = 'block';
+                document.getElementById('qrModal').classList.add('show');
             } catch (error) {
                 console.error('Error mostrando QR:', error);
                 showNotification('Error al generar QR', 'error');
@@ -907,7 +1691,6 @@
                 qrElement.innerHTML = qr.createImgTag(4);
                 container.appendChild(qrElement);
                 
-                // Guardar el QR para descarga
                 window.currentQRCode = qr;
             } catch (error) {
                 console.error('Error generando QR:', error);
@@ -923,8 +1706,9 @@
             });
         }
 
-        function cerrarModal() {
-            document.getElementById('qrModal').style.display = 'none';
+        function cerrarModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('show');
         }
 
         async function eliminarPlano(planoId) {
@@ -935,8 +1719,6 @@
             try {
                 await api.deletePlano(planoId);
                 showNotification('Plano eliminado correctamente', 'success');
-                
-                // Recargar datos
                 await loadData();
             } catch (error) {
                 console.error('Error eliminando plano:', error);
@@ -954,7 +1736,6 @@
         }
 
         function showNotification(message, type = 'info') {
-            // Crear elemento de notificación
             const notification = document.createElement('div');
             notification.style.cssText = `
                 position: fixed;
@@ -970,7 +1751,6 @@
                 box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             `;
 
-            // Colores según el tipo
             const colors = {
                 success: '#059669',
                 error: '#dc2626',
@@ -983,7 +1763,6 @@
 
             document.body.appendChild(notification);
 
-            // Remover después de 3 segundos
             setTimeout(() => {
                 notification.style.animation = 'slideOutRight 0.3s ease';
                 setTimeout(() => {
@@ -1001,54 +1780,43 @@
             }
 
             try {
-                // Crear canvas para el sticker
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
                 
-                // Configurar tamaño del sticker (formato compacto)
                 const stickerWidth = 400;
                 const stickerHeight = 300;
                 canvas.width = stickerWidth;
                 canvas.height = stickerHeight;
                 
-                // Fondo blanco
                 ctx.fillStyle = '#ffffff';
                 ctx.fillRect(0, 0, stickerWidth, stickerHeight);
                 
-                // Generar QR como imagen
                 const qrSize = 150;
                 const qrX = (stickerWidth - qrSize) / 2;
                 const qrY = 20;
                 
-                // Crear imagen del QR
                 const qrDataURL = window.currentQRCode.createDataURL(4);
                 const qrImg = new Image();
                 
                 qrImg.onload = function() {
-                    // Dibujar QR
                     ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
                     
-                    // Configurar texto
                     ctx.fillStyle = '#333333';
                     ctx.textAlign = 'center';
                     
-                    // Título del plano
                     ctx.font = 'bold 16px Arial';
                     const nombreTexto = planoActualQR.nombre.length > 30 ? 
                         planoActualQR.nombre.substring(0, 30) + '...' : 
                         planoActualQR.nombre;
                     ctx.fillText(nombreTexto, stickerWidth / 2, qrY + qrSize + 25);
                     
-                    // Cliente
                     ctx.font = '12px Arial';
                     if (planoActualQR.cliente) {
                         ctx.fillText(`Cliente: ${planoActualQR.cliente}`, stickerWidth / 2, qrY + qrSize + 45);
                     }
                     
-                    // Fecha
                     ctx.fillText(`Fecha: ${formatDate(planoActualQR.fecha_creacion)}`, stickerWidth / 2, qrY + qrSize + 65);
                     
-                    // Descargar
                     const link = document.createElement('a');
                     link.download = `QR_${planoActualQR.nombre.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
                     link.href = canvas.toDataURL('image/png');
@@ -1070,13 +1838,6 @@
                 api.logout();
             }
         }
-
-        // Cerrar modal al hacer clic fuera
-        document.getElementById('qrModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                cerrarModal();
-            }
-        });
 
         // Agregar estilos para las animaciones
         const style = document.createElement('style');

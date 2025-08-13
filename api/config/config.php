@@ -7,7 +7,7 @@ if (ENVIRONMENT === 'production') {
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'u617265898_planos_qr');
     define('DB_USER', 'u617265898_gabriel');
-    define('DB_PASS', 'TU_PASSWORD_DE_BD'); // La contraseña que configuraste
+    define('DB_PASS', 'Lolplop13#'); // ⚠️ Reemplaza con tu contraseña real
     define('BASE_URL', 'https://qr.kodeongg.com');
 } else {
     // Configuración para desarrollo local

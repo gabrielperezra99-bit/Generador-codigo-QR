@@ -1,7 +1,7 @@
 class API {
     constructor() {
-        // Configuración para desarrollo local
-        this.baseURL = 'http://localhost/planos/api';
+        // Configuración para producción
+        this.baseURL = 'https://qr.kodeongg.com/api'; // ✅ URL de tu subdominio
         this.token = localStorage.getItem('token');
     }
 

@@ -29,13 +29,11 @@ try {
     $database = new Database();
     $db = $database->getConnection();
     
-    // Obtener planos del usuario con todos los campos necesarios
-    $query = "SELECT id, nombre, cliente, descripcion, archivo_url, imagen_preview, formato, qr_code, metadata, 
-                     es_favorito, fecha_favorito, estado, progreso_porcentaje, etiquetas, tiempo_estimado, 
-                     visitas, fecha_subida, fecha_creacion, fecha_actualizacion
+    // Obtener planos del usuario directamente de la tabla planos
+    $query = "SELECT id, nombre, cliente, descripcion, archivo_url, formato, qr_code, metadata, version, fecha_subida
               FROM planos 
               WHERE usuario_id = :usuario_id 
-              ORDER BY es_favorito DESC, fecha_favorito DESC, fecha_creacion DESC";
+              ORDER BY fecha_subida DESC";
     
     $stmt = $db->prepare($query);
     $stmt->bindParam(":usuario_id", $usuario_id);
@@ -53,24 +51,14 @@ try {
             'descripcion' => $row['descripcion'],
             'archivo_nombre' => $metadata['archivo_nombre'] ?? $row['nombre'],
             'archivo_url' => $row['archivo_url'],
-            'imagen_preview' => $row['imagen_preview'],
             'archivo_tamaño' => $metadata['archivo_tamaño'] ?? 0,
-            'fecha_creacion' => $row['fecha_creacion'],
-            'fecha_subida' => $row['fecha_subida'],
-            'fecha_actualizacion' => $row['fecha_actualizacion'],
+            'fecha_creacion' => $row['fecha_subida'],
             'qr_code' => $row['qr_code'],
             'formato' => $row['formato'],
-            'visitas' => intval($row['visitas'] ?? 0),
-            'favorito' => intval($row['es_favorito']) === 1,
-            'es_favorito' => intval($row['es_favorito']),
-            'fecha_favorito' => $row['fecha_favorito'],
-            'estado' => $row['estado'],
-            'progreso_porcentaje' => intval($row['progreso_porcentaje'] ?? 0),
-            'etiquetas' => $row['etiquetas'],
-            'tiempo_estimado' => $row['tiempo_estimado']
+            'visitas' => intval($row['version'] ?? 0)
         ];
         
-        $planos[] = $plano;
+        $planos[] = $plano; // Corregido: era $plano_item, ahora es $plano
     }
     
     echo json_encode($planos);

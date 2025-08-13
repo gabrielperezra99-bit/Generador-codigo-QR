@@ -6,14 +6,6 @@
     <title>Ver Plano</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- CADViewer CSS -->
-    <link rel="stylesheet" href="node_modules/cadviewer/css/cadviewer.css">
-    
-    <!-- CADViewer JS -->
-    <script src="node_modules/cadviewer/js/cadviewer.js"></script>
-    <!-- CADViewer desde CDN -->
-    <script src="https://cadviewer.com/javascriptcanvas/app/cv/cv-js/CADViewer_JS.js"></script>
-    <script src="js/dwg_viewer.js"></script>
     <style>
         :root {
             /* Paleta profesional corporativa */
@@ -413,24 +405,22 @@
         }
 
         function generarVistaArchivo(plano) {
+            // Extraer extensión del archivo_url en lugar de usar formato
             const archivoUrl = plano.archivo_url;
             const extension = archivoUrl.split('.').pop().toLowerCase();
             
+            console.log('Archivo URL:', archivoUrl);
+            console.log('Extensión detectada:', extension);
+            console.log('Formato field:', plano.formato);
+            
             if (extension === 'pdf') {
+                console.log('Mostrando como PDF');
                 return `<iframe src="${archivoUrl}" type="application/pdf"></iframe>`;
             } else if (['jpg', 'jpeg', 'png'].includes(extension)) {
+                console.log('Mostrando como imagen');
                 return `<img src="${archivoUrl}" alt="${plano.archivo_nombre}">`;
-            } else if (extension === 'dwg') {
-                // Usar el nuevo visor DWG avanzado
-                setTimeout(() => {
-                    if (window.dwgViewer) {
-                        window.dwgViewer.displayDWG(plano);
-                    }
-                }, 100);
-                
-                return `<div id="archivo-viewer-content" style="min-height: 600px;"></div>`;
             } else {
-                // Fallback para otros tipos de archivo
+                console.log('Mostrando vista previa no disponible');
                 return `
                     <div class="no-preview">
                         <i class="fas fa-file"></i>

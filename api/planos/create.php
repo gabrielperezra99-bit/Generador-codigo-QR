@@ -6,11 +6,9 @@ ini_set('max_execution_time', 600);
 ini_set('max_input_time', 600);
 ini_set('memory_limit', '512M');
 
-require_once '../config/config.php'; // Agregar esta línea
 require_once '../config/cors.php';
 require_once '../config/database.php';
 require_once '../utils/jwt.php';
-require_once '../utils/dwg_converter.php';
 
 header('Content-Type: application/json');
 
@@ -100,33 +98,12 @@ try {
     $unique_filename = uniqid() . '_' . time() . '.' . $file_extension;
     $file_path = $upload_dir . $unique_filename;
     
-    // Después de mover el archivo subido
+    // Mover archivo subido
     if (!move_uploaded_file($archivo['tmp_name'], $file_path)) {
         http_response_code(500);
         echo json_encode(['message' => 'Error al guardar el archivo']);
         exit;
     }
-    
-    // Generar previsualización para archivos DWG
-    $preview_url = null;
-    /*
-    // ⚠️ Comentado temporalmente hasta configurar ConvertAPI
-    if (strtolower($file_extension) === 'dwg') {
-        $converter = new DWGConverter();
-        $preview_filename = pathinfo($unique_filename, PATHINFO_FILENAME) . '_preview.jpg';
-        $preview_path = $upload_dir . $preview_filename;
-        
-        if ($converter->convertDWGToImage($file_path, $preview_path)) {
-            // Generar thumbnail más pequeño
-            $thumbnail_filename = pathinfo($unique_filename, PATHINFO_FILENAME) . '_thumb.jpg';
-            $thumbnail_path = $upload_dir . $thumbnail_filename;
-            
-            if ($converter->generateThumbnail($preview_path, $thumbnail_path)) {
-                $preview_url = 'uploads/' . $thumbnail_filename;
-            }
-        }
-    }
-    */
     
     // Crear conexión a la base de datos
     $database = new Database();
@@ -142,23 +119,15 @@ try {
     } 
     
     // Preparar datos para insertar directamente en planos
-    // Obtener datos del formulario
-    $nombre_plano = $_POST['nombre'] ?? '';
-    $cliente = $_POST['cliente'] ?? '';
+    $cliente = $_POST['cliente'];
     $descripcion = $_POST['descripcion'] ?? '';
-    $empresa = $_POST['empresa'] ?? 'FREMAQ'; // Nuevo campo
+    $nombre_plano = pathinfo($archivo['name'], PATHINFO_FILENAME);
     $archivo_url = 'uploads/' . $unique_filename;
     $formato = $file_extension; // Usar la extensión como formato
     
-    // Generar datos del QR con configuración dinámica
-    $base_url = BASE_URL; // Usar la constante en lugar de hardcodear
-    $qr_code = $base_url . '/ver-plano-simple.html?id=';
-    
-    // Remover /api de la ruta si existe
-    $request_uri = $_SERVER['REQUEST_URI'];
-    $base_path = str_replace('/api/planos/create.php', '', $request_uri);
-    
-    $qr_code = $base_url . $base_path . '/ver-plano-simple.html?id=';
+    // Generar datos del QR
+    $base_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'];
+    $qr_code = $base_url . '/planos/ver-plano-simple.html?id=';
     
     // Crear metadata JSON con información adicional
     $metadata_json = json_encode([
@@ -167,8 +136,8 @@ try {
     ]);
     
     // Insertar plano directamente con la nueva estructura
-    $plano_query = "INSERT INTO planos (usuario_id, nombre, cliente, descripcion, archivo_url, formato, qr_code, metadata, empresa)
-                    VALUES (:usuario_id, :nombre, :cliente, :descripcion, :archivo_url, :formato, :qr_code, :metadata, :empresa)";
+    $plano_query = "INSERT INTO planos (usuario_id, nombre, cliente, descripcion, archivo_url, formato, qr_code, metadata)
+                    VALUES (:usuario_id, :nombre, :cliente, :descripcion, :archivo_url, :formato, :qr_code, :metadata)";
     
     $plano_stmt = $db->prepare($plano_query);
     $plano_stmt->bindParam(":usuario_id", $usuario_id);
@@ -179,7 +148,6 @@ try {
     $plano_stmt->bindParam(":formato", $formato);
     $plano_stmt->bindParam(":qr_code", $qr_code);
     $plano_stmt->bindParam(":metadata", $metadata_json);
-    $plano_stmt->bindParam(":empresa", $empresa);
     
     if ($plano_stmt->execute()) {
         $plano_id = $db->lastInsertId();

@@ -666,73 +666,6 @@ header p {
     border: 1px solid var(--border-light);
 }
 
-.plano-card {
-    position: relative;
-}
-
-.plano-card.favorito::before {
-    content: '★';
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    color: #fbbf24;
-    font-size: 20px;
-    z-index: 10;
-    text-shadow: 0 0 3px rgba(0,0,0,0.5);
-    pointer-events: none;
-}
-
-.favorito-badge {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    background: linear-gradient(135deg, #fbbf24, #f59e0b);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 0.7rem;
-    font-weight: 500;
-    z-index: 5;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.estado-badge {
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 0.7rem;
-    font-weight: 500;
-    z-index: 5;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.estado-planificacion {
-    background: linear-gradient(135deg, #6b7280, #4b5563);
-    color: white;
-}
-
-.estado-en_progreso {
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    color: white;
-}
-
-.estado-revision {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: white;
-}
-
-.estado-completado {
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: white;
-}
-
-.estado-pausado {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-    color: white;
-}
-
 .trabajo-card:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow-lg);
@@ -1088,23 +1021,4 @@ header p {
 
 @keyframes spin {
     to { transform: rotate(360deg); }
-}
-
-/* Estilos para empresas */
-.empresa-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: white;
-    margin-bottom: 8px;
-}
-
-.empresa-badge.fremaq {
-    background: #ff8c00; /* Naranjo */
-}
-
-.empresa-badge.solman {
-    background: #20b2aa; /* Verde agua */
 }

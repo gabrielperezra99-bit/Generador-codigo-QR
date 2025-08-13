@@ -1,7 +1,6 @@
 class API {
     constructor() {
-        // Configuración para producción
-        this.baseURL = 'https://qr.kodeongg.com/api'; // ✅ URL de tu subdominio
+        this.baseURL = 'http://localhost/planos/api';
         this.token = localStorage.getItem('token');
     }
 
@@ -142,14 +141,6 @@ class API {
         });
 
         return await this.request(`/planos/search.php?${params.toString()}`);
-    }
-
-    // Método para toggle favorito
-    async toggleFavorito(planoId) {
-        return await this.request('/planos/toggle_favorito.php', {
-            method: 'POST',
-            body: JSON.stringify({ plano_id: planoId })
-        });
     }
 }
 

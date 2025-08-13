@@ -109,6 +109,8 @@ try {
     
     // Generar previsualización para archivos DWG
     $preview_url = null;
+    /*
+    // ⚠️ Comentado temporalmente hasta configurar ConvertAPI
     if (strtolower($file_extension) === 'dwg') {
         $converter = new DWGConverter();
         $preview_filename = pathinfo($unique_filename, PATHINFO_FILENAME) . '_preview.jpg';
@@ -124,6 +126,7 @@ try {
             }
         }
     }
+    */
     
     // Crear conexión a la base de datos
     $database = new Database();

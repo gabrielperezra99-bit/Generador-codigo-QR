@@ -22,3 +22,51 @@ RewriteRule ^(.*)$ $1 [R=200,L]
     Order allow,deny
     Deny from all
 </Files>
+
+RewriteEngine On
+
+# Allow direct access to PHP files
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{REQUEST_FILENAME} \.php$
+RewriteRule ^(.*)$ $1 [L]
+
+# Handle API routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/(.*)$ api/$1 [L,QSA]
+
+# Handle other routes to index.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.html [L]
+
+## Diagnóstico del Problema 404
+
+El error 404 sugiere que Hostinger no puede encontrar los archivos PHP. Esto puede deberse a:
+
+1. **Configuración incorrecta del .htaccess**
+2. **Archivos no subidos correctamente**
+3. **Problema con la estructura de directorios en Hostinger**
+
+## Solución Inmediata
+
+### Paso 1: Simplificar el .htaccess
+
+Reemplaza completamente tu archivo <mcfile name=".htaccess" path="c:\xampp\htdocs\planos\.htaccess"></mcfile> con esta versión más simple:
+```
+RewriteEngine On
+
+# Permitir acceso directo a archivos PHP
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule \.(php)$ - [L]
+
+# Manejar rutas de API
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/(.*)$ api/$1 [L,QSA]
+
+# Redirigir todo lo demás a index.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.html [L]
+```
